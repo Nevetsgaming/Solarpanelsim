@@ -1,5 +1,6 @@
 export const defaultSettings = {
   wavelengthNm: 550,
+  loadResistance: 10,
   rearThickness: 20,
   siliconThickness: 180,
   coatingThickness: 80,
@@ -21,6 +22,9 @@ type PartOption = {
 
 // Wavelength and silicon thickness drive optics; the other settings affect only the drawing.
 export const partOptions: Record<string, PartOption[]> = {
+  load: [
+    { key: 'loadResistance', label: 'Load resistance', unit: 'Ω', min: 0.1, max: 100, step: 0.1 },
+  ],
   sun: [
     { key: 'wavelengthNm', label: 'Wavelength', unit: 'nm', min: 300, max: 1200, step: 1 },
   ],

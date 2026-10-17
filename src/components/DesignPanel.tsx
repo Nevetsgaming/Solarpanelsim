@@ -6,13 +6,14 @@ import type { PartSettings, SettingName } from '../partOptions'
 type DesignPanelProps = {
   placedPartCount: number
   onPlacePart: (partId: string) => void
+  onSelectPart: (partId: string) => void
   selectedPartId: string | null
   settings: PartSettings
   onSettingChange: (name: SettingName, value: number) => void
   onReset: () => void
 }
 
-export default function DesignPanel({ placedPartCount, onPlacePart, selectedPartId, settings, onSettingChange, onReset }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset }: DesignPanelProps) {
   const selectedPart = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   return (
     <Panel id="design" title="Parts">
@@ -33,6 +34,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart, selectedPart
             {part.name}
           </button>
         ))}
+        <button type="button" className="part" aria-pressed={selectedPartId === 'load'} onClick={() => onSelectPart('load')}>Load resistance</button>
         <p className="part-hint">Click a part to learn. Drag or click the next part to place it.</p>
       </div>
       <PartOptions selectedPartId={selectedPartId} settings={settings} onSettingChange={onSettingChange} />

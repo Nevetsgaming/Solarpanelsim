@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Panel from './Panel'
 import TopView from './TopView'
+import Resistor from './Resistor'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
 
@@ -76,6 +77,7 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
           </div>
           </>
           )}
+          <Resistor resistance={settings.loadResistance} selected={selectedPartId === 'load'} onSelect={() => onSelectPart('load')} />
         </div>
       </div>
     </Panel>

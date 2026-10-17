@@ -21,6 +21,10 @@ export const parts = [
 export const learningTopics = [
   ...parts,
   {
+    id: 'load', name: 'Load resistance',
+    description: 'The load represents an external device using the cell’s electrical output. Resistance describes how strongly it opposes current. This control stores your chosen resistance; electrical calculations will be added later.',
+  },
+  {
     id: 'sun', name: 'Sunlight',
     description: 'Light supplies the energy. A photon with enough energy can generate an electron–hole pair in silicon. The contacts collect the resulting current through an external circuit.',
   },

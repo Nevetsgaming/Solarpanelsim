@@ -38,7 +38,7 @@ function App() {
       </header>
       <main>
         <div className="workspace">
-          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} />
+          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} />
           <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} />
           <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} />
         </div>

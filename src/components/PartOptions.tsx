@@ -35,6 +35,8 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange 
       )) : <p>Select a part to see its options.</p>}
       {options && <p>{partId === 'sun'
         ? 'Optical power stays fixed when wavelength changes.'
+        : partId === 'load'
+          ? 'Resistance setting only. Current, voltage and power are not calculated yet.'
         : partId === 'silicon'
           ? 'Thickness changes single-pass absorption. Drawing not to scale.'
           : 'Visual adjustments only. Thicknesses exaggerated for visibility.'}</p>}

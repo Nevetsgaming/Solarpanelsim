@@ -72,6 +72,9 @@
 .top-cell svg { display: block; width: 100%; overflow: hidden; }
 .top-cell[aria-pressed="true"] { outline: 2px solid #ba6c00; outline-offset: 2px; }
 .top-view-caption { margin-top: 12px; font-size: 11px; }
+.load-resistor { display: block; width: min(100%, 260px); margin: 28px auto 0; padding: 8px; border: 1px solid transparent; background: none; color: #243244; cursor: pointer; font-size: 12px; }
+.load-resistor svg { display: block; width: 100%; margin-bottom: 6px; }
+.load-resistor[aria-pressed="true"] { border-color: #ba6c00; }
 
 
 /* Keep labels outside the stack so the physical layers always touch. */
