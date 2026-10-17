@@ -37,14 +37,6 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon }:
         </>
       ) : <p>Place silicon to measure absorption.</p>}
 
-      <details>
-        <summary>Equations & assumptions</summary>
-        <p>E = hc/λ. E is photon energy; h is Planck’s constant; c is light speed; λ is wavelength, converted from nm to metres.</p>
-        <p>A = 1 − exp(−αd). A is absorbed fraction; α is the absorption coefficient in cm⁻¹; d is thickness in cm (µm × 0.0001).</p>
-        <p>Photon rate per area = optical power per area / energy per photon in joules.</p>
-        <p>Data: <a href="https://doi.org/10.1016/j.solmat.2008.06.009" target="_blank" rel="noreferrer">Green (2008), Table 1, silicon at 300 K</a>. Logarithmic interpolation between 10 nm samples.</p>
-        <p>Single pass only: reflection, shading, rear reflection and collection losses are not included yet. Measured absorption may be nonzero below the bandgap; the teaching model sets generation-capable absorption to zero below 1.12 eV.</p>
-      </details>
     </section>
   )
 }

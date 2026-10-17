@@ -40,6 +40,10 @@ export default function DesignPanel({ placedPartCount, onPlacePart, selectedPart
       <div className="power-box">
         <h3>Power</h3>
         <p className="power-value" aria-label="Power not yet calculated">— <span>W</span></p>
+        <div className="electrical-readings">
+          <div><h3>Current</h3><p aria-label="Current not yet calculated">— A</p></div>
+          <div><h3>Voltage</h3><p aria-label="Voltage not yet calculated">— V</p></div>
+        </div>
       </div>
     </Panel>
   )

@@ -21,7 +21,7 @@
 
 .panel { min-width: 0; background: #f5f6f8; display: flex; flex-direction: column; }
 .panel:nth-child(2) { background: #fff; }
-.panel-header { padding: 18px 24px; border-bottom: 1px solid var(--border); }
+.panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; flex-shrink: 0; padding: 12px 24px; border-bottom: 1px solid var(--border); }
 .panel-header h2 { font-size: 14px; font-weight: 600; }
 .panel-body { min-height: 320px; display: flex; flex-direction: column; flex: 1; }
 
@@ -60,10 +60,18 @@
 .option-control label { display: block; margin-bottom: 6px; }
 .option-control output { display: block; margin-bottom: 6px; }
 .option-control input { width: 100%; margin: 0; accent-color: #315c89; }
-.power-box { margin: auto 24px 24px; padding: 18px; border: 1px solid var(--border); background: #fff; }
+.power-box { margin: 0 16px 24px; padding: 18px; border: 1px solid var(--border); background: #fff; }
 .power-box h3 { font-size: 13px; font-weight: 600; }
 .power-value { margin-top: 8px; font-size: 32px; }
 .power-value span { font-size: 16px; color: var(--muted); }
+.electrical-readings { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.electrical-readings p { margin-top: 8px; font-size: 20px; }
+.view-toggle { border: 1px solid #7d8996; background: #fff; color: #243244; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+.view-toggle:focus-visible { outline: 2px solid #315c89; outline-offset: 2px; }
+.top-cell { display: block; width: min(100%, 260px); margin: auto; padding: 0; border: 1px solid #000; background: none; cursor: pointer; }
+.top-cell svg { display: block; width: 100%; overflow: hidden; }
+.top-cell[aria-pressed="true"] { outline: 2px solid #ba6c00; outline-offset: 2px; }
+.top-view-caption { margin-top: 12px; font-size: 11px; }
 
 
 /* Keep labels outside the stack so the physical layers always touch. */
@@ -71,7 +79,7 @@
 .part[aria-pressed="true"] { background: #cbdce9; }
 .cell-layer[aria-pressed="true"], .silicon button[aria-pressed="true"], .silicon[data-selected="true"] { outline: 2px solid #ba6c00; outline-offset: -3px; }
 .layer-label[aria-pressed="true"] { font-weight: 700; text-decoration: underline; }
-.reset-button { margin: 0 16px 24px; padding: 10px; border: 1px solid #7d8996; background: #fff; color: #243244; cursor: pointer; font-size: 12px; }
+.reset-button { margin: 0 16px 12px; padding: 10px; border: 1px solid #7d8996; background: #fff; color: #243244; cursor: pointer; font-size: 12px; }
 .reset-button:focus-visible { outline: 2px solid #315c89; outline-offset: 2px; }
 .optics-readout { padding: 24px; border-top: 1px solid var(--border); font-size: 12px; }
 .optics-readout h3 { font-size: 14px; margin-bottom: 16px; }
@@ -81,8 +89,14 @@
 .optics-readout dd { margin: 3px 0 0; font-weight: 600; overflow-wrap: anywhere; }
 .optics-readout p { margin: 12px 0; }
 .optics-readout meter { display: block; width: 100%; height: 20px; }
-.optics-readout summary { cursor: pointer; margin-top: 20px; }
-.optics-readout a { color: #244e78; }
+
+/* Each desktop column scrolls inside the viewport, independently of its neighbours. */
+@media (min-width: 801px) {
+  .workspace { height: calc(100svh - 64px); min-height: 0; }
+  .panel { min-height: 0; overflow: hidden; }
+  .panel-body { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; }
+  .panel-body > * { flex-shrink: 0; }
+}
 
 @container (max-width: 640px) {
   .layer-label { display: none; }

@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import Panel from './Panel'
+import TopView from './TopView'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
 
@@ -11,12 +13,17 @@ type CellVisualizationProps = {
 }
 
 export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings, selectedPartId }: CellVisualizationProps) {
+  const [isTopView, setIsTopView] = useState(false)
   // Map physical settings to readable drawing sizes. This is not a scale drawing.
   const fingerWidthPx = settings.fingerWidth / 1000 * 60
   const fingerSpacingPx = settings.fingerSpacing * 60
 
   return (
-    <Panel id="visualization" title="Assembly">
+    <Panel id="visualization" title="Assembly" headerAction={
+      <button type="button" className="view-toggle" aria-pressed={isTopView} onClick={() => setIsTopView(!isTopView)}>
+        {isTopView ? 'Cross-section' : 'Top view'}
+      </button>
+    }>
       <div
         className="assembly-area"
         onDragOver={(event) => event.preventDefault()}
@@ -32,6 +39,10 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
               ? `Drop ${parts[placedPartCount].name.toLowerCase()} here`
               : 'Cell assembled'}
           </p>
+          {isTopView ? (
+            <TopView placedPartCount={placedPartCount} settings={settings} selectedPartId={selectedPartId} onSelectPart={onSelectPart} />
+          ) : (
+          <>
           <div className="cell-stack">
             {parts.slice(0, placedPartCount).map((part) => (
               <div key={part.id} className="layer-row">
@@ -63,6 +74,8 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
               <button type="button" key={part.id} aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>
             ))}
           </div>
+          </>
+          )}
         </div>
       </div>
     </Panel>
