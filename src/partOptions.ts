@@ -1,4 +1,5 @@
 export const defaultSettings = {
+  wavelengthNm: 550,
   rearThickness: 20,
   siliconThickness: 180,
   coatingThickness: 80,
@@ -18,8 +19,11 @@ type PartOption = {
   step: number
 }
 
-// These ranges are for exploring the drawing, not a calibrated device model.
+// Wavelength and silicon thickness drive optics; the other settings affect only the drawing.
 export const partOptions: Record<string, PartOption[]> = {
+  sun: [
+    { key: 'wavelengthNm', label: 'Wavelength', unit: 'nm', min: 300, max: 1200, step: 1 },
+  ],
   'rear-contact': [
     { key: 'rearThickness', label: 'Metal thickness', unit: 'µm', min: 5, max: 50, step: 1 },
   ],

@@ -1,4 +1,4 @@
-import { parts } from '../parts'
+import { learningTopics } from '../parts'
 import { partOptions } from '../partOptions'
 import type { PartSettings, SettingName } from '../partOptions'
 
@@ -11,7 +11,7 @@ type PartOptionsProps = {
 export default function PartOptions({ selectedPartId, settings, onSettingChange }: PartOptionsProps) {
   // The emitter and base are regions of the same silicon part.
   const partId = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
-  const selectedPart = parts.find((part) => part.id === partId)
+  const selectedPart = learningTopics.find((part) => part.id === partId)
   const options = partId ? partOptions[partId] : undefined
 
   return (
@@ -33,7 +33,11 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange 
           />
         </div>
       )) : <p>Select a part to see its options.</p>}
-      {options && <p>Visual adjustments only. Layer thicknesses are exaggerated for visibility.</p>}
+      {options && <p>{partId === 'sun'
+        ? 'Optical power stays fixed when wavelength changes.'
+        : partId === 'silicon'
+          ? 'Thickness changes single-pass absorption. Drawing not to scale.'
+          : 'Visual adjustments only. Thicknesses exaggerated for visibility.'}</p>}
     </section>
   )
 }

@@ -17,6 +17,12 @@ function App() {
     setSettings((current) => ({ ...current, [name]: value }))
   }
 
+  function resetAssembly() {
+    setPlacedPartCount(0)
+    setSelectedPartId(null)
+    setSettings(defaultSettings)
+  }
+
   function placePart(partId: string) {
     if (!parts.some((part) => part.id === partId)) return
     setSelectedPartId(partId)
@@ -32,9 +38,9 @@ function App() {
       </header>
       <main>
         <div className="workspace">
-          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} />
-          <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} settings={settings} />
-          <LearningPanel selectedPartId={selectedPartId} />
+          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} />
+          <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} />
+          <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} />
         </div>
       </main>
       

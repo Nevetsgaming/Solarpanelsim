@@ -1,11 +1,15 @@
 import Panel from './Panel'
 import { learningTopics } from '../parts'
+import OpticsReadout from './OpticsReadout'
+import type { PartSettings } from '../partOptions'
 
 type LearningPanelProps = {
   selectedPartId: string | null
+  settings: PartSettings
+  hasSilicon: boolean
 }
 
-export default function LearningPanel({ selectedPartId }: LearningPanelProps) {
+export default function LearningPanel({ selectedPartId, settings, hasSilicon }: LearningPanelProps) {
   const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
 
   return (
@@ -16,6 +20,7 @@ export default function LearningPanel({ selectedPartId }: LearningPanelProps) {
           <p>{selectedPart.description}</p>
         </div>
       )}
+      <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} />
     </Panel>
   )
 }

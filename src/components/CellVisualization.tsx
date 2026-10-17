@@ -7,9 +7,10 @@ type CellVisualizationProps = {
   onPlacePart: (partId: string) => void
   onSelectPart: (partId: string) => void
   settings: PartSettings
+  selectedPartId: string | null
 }
 
-export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings, selectedPartId }: CellVisualizationProps) {
   // Map physical settings to readable drawing sizes. This is not a scale drawing.
   const fingerWidthPx = settings.fingerWidth / 1000 * 60
   const fingerSpacingPx = settings.fingerSpacing * 60
@@ -24,7 +25,7 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
           onPlacePart(event.dataTransfer.getData('text/plain'))
         }}
       >
-        <button type="button" className="assembly-sun" aria-label="Learn about sunlight" onClick={() => onSelectPart('sun')}>☀</button>
+        <button type="button" className="assembly-sun" aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>☀</button>
         <div className="assembly-status" role="status">
           <p className="assembly-hint">
             {parts[placedPartCount]
@@ -34,17 +35,18 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
           <div className="cell-stack">
             {parts.slice(0, placedPartCount).map((part) => (
               <div key={part.id} className="layer-row">
-                <button type="button" className="layer-label" onClick={() => onSelectPart(part.id)}>{part.name}</button>
+                <button type="button" className="layer-label" aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>
                 {part.id === 'silicon' ? (
-                  <div className="silicon">
-                    <button type="button" className="silicon-emitter" onClick={() => onSelectPart('emitter')}>n-type emitter</button>
-                    <button type="button" className="silicon-base" style={{ height: 40 + settings.siliconThickness * 0.4 }} onClick={() => onSelectPart('base')}>p-type base</button>
+                  <div className="silicon" data-selected={selectedPartId === 'silicon'}>
+                    <button type="button" className="silicon-emitter" aria-pressed={selectedPartId === 'emitter'} onClick={() => onSelectPart('emitter')}>n-type emitter</button>
+                    <button type="button" className="silicon-base" aria-pressed={selectedPartId === 'base'} style={{ height: 40 + settings.siliconThickness * 0.4 }} onClick={() => onSelectPart('base')}>p-type base</button>
                   </div>
                 ) : (
                   <button
                     type="button"
                     className={`cell-layer ${part.id}`}
                     aria-label={`Learn about ${part.name.toLowerCase()}`}
+                    aria-pressed={selectedPartId === part.id}
                     onClick={() => onSelectPart(part.id)}
                     style={part.id === 'rear-contact'
                       ? { height: 8 + settings.rearThickness * 0.6 }
@@ -54,6 +56,11 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
                   />
                 )}
               </div>
+            ))}
+          </div>
+          <div className="compact-layer-labels" aria-label="Select an assembled layer">
+            {parts.slice(0, placedPartCount).reverse().map((part) => (
+              <button type="button" key={part.id} aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>
             ))}
           </div>
         </div>

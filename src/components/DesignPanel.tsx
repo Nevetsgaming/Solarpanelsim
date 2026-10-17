@@ -9,9 +9,11 @@ type DesignPanelProps = {
   selectedPartId: string | null
   settings: PartSettings
   onSettingChange: (name: SettingName, value: number) => void
+  onReset: () => void
 }
 
-export default function DesignPanel({ placedPartCount, onPlacePart, selectedPartId, settings, onSettingChange }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart, selectedPartId, settings, onSettingChange, onReset }: DesignPanelProps) {
+  const selectedPart = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   return (
     <Panel id="design" title="Parts">
       <div className="parts-list">
@@ -20,6 +22,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart, selectedPart
             key={part.id}
             className="part"
             type="button"
+            aria-pressed={selectedPart === part.id}
             draggable={index === placedPartCount}
             onDragStart={(event) => {
               event.dataTransfer.setData('text/plain', part.id)
@@ -33,6 +36,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart, selectedPart
         <p className="part-hint">Click a part to learn. Drag or click the next part to place it.</p>
       </div>
       <PartOptions selectedPartId={selectedPartId} settings={settings} onSettingChange={onSettingChange} />
+      <button type="button" className="reset-button" onClick={onReset}>Reset assembly</button>
       <div className="power-box">
         <h3>Power</h3>
         <p className="power-value" aria-label="Power not yet calculated">— <span>W</span></p>
