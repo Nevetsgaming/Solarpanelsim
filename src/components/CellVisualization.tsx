@@ -18,7 +18,7 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
           onPlacePart(event.dataTransfer.getData('text/plain'))
         }}
       >
-        <div className="assembly-sun" role="img" aria-label="Sun">☀</div>
+        <button type="button" className="assembly-sun" aria-label="Learn about sunlight" onClick={() => onSelectPart('sun')}>☀</button>
         <div className="assembly-status" role="status">
           <p className="assembly-hint">
             {parts[placedPartCount]
@@ -29,7 +29,14 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
             {parts.slice(0, placedPartCount).map((part) => (
               <div key={part.id} className="layer-row">
                 <button type="button" className="layer-label" onClick={() => onSelectPart(part.id)}>{part.name}</button>
-                <div className={`cell-layer ${part.id}`} aria-hidden="true" />
+                {part.id === 'silicon' ? (
+                  <div className="silicon">
+                    <button type="button" className="silicon-emitter" onClick={() => onSelectPart('emitter')}>n-type emitter</button>
+                    <button type="button" className="silicon-base" onClick={() => onSelectPart('base')}>p-type base</button>
+                  </div>
+                ) : (
+                  <button type="button" className={`cell-layer ${part.id}`} aria-label={`Learn about ${part.name.toLowerCase()}`} onClick={() => onSelectPart(part.id)} />
+                )}
               </div>
             ))}
           </div>

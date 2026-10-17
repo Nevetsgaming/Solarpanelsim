@@ -1,12 +1,12 @@
 import Panel from './Panel'
-import { parts } from '../parts'
+import { learningTopics } from '../parts'
 
 type LearningPanelProps = {
   selectedPartId: string | null
 }
 
 export default function LearningPanel({ selectedPartId }: LearningPanelProps) {
-  const selectedPart = parts.find((part) => part.id === selectedPartId)
+  const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
 
   return (
     <Panel id="learning" title="Understand">

@@ -16,7 +16,6 @@ export default function DesignPanel({ placedPartCount, onPlacePart }: DesignPane
             className="part"
             type="button"
             draggable={index === placedPartCount}
-            disabled={index !== placedPartCount}
             onDragStart={(event) => {
               event.dataTransfer.setData('text/plain', part.id)
               event.dataTransfer.effectAllowed = 'copy'
@@ -26,7 +25,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart }: DesignPane
             {part.name}
           </button>
         ))}
-        <p className="part-hint">Drag into the middle, or click to place.</p>
+        <p className="part-hint">Click a part to learn. Drag or click the next part to place it.</p>
       </div>
       <div className="power-box">
         <h3>Power</h3>

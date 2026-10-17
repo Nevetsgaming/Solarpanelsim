@@ -26,32 +26,42 @@
 .panel-body { min-height: 320px; display: flex; flex-direction: column; flex: 1; }
 
 .parts-list { padding: 16px; }
-.part { width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #7d8996; background: #e1e5e9; color: #243244; cursor: grab; text-align: left; font-size: 12px; white-space: nowrap; }
+.part { width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #7d8996; background: #e1e5e9; color: #243244; cursor: pointer; text-align: left; font-size: 12px; white-space: nowrap; }
+.part[draggable="true"] { cursor: grab; border-color: #315c89; }
 .part:disabled { opacity: .5; cursor: default; }
 .part:focus-visible { outline: 2px solid #315c89; outline-offset: 3px; }
 .part-hint { margin-top: 12px; color: var(--muted); font-size: 12px; }
-.assembly-area { position: relative; flex: 1; min-height: 440px; padding: 120px 16px 32px; display: grid; place-items: center; background: linear-gradient(#b9def5, #edf7fc); }
+.assembly-area { position: relative; flex: 1; min-height: 440px; padding: 120px 16px 32px; display: grid; place-items: center; background: linear-gradient(#b9def5, #edf7fc); container-type: inline-size; }
 .assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
 .assembly-hint { margin-bottom: 24px; }
-.assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #a66b00; font-size: 72px; line-height: 1; }
+.assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #a66b00; font-size: 72px; line-height: 1; background: none; border: none; padding: 0; cursor: pointer; }
 /* Reverse the visual order so each new layer sits on top of the previous one. */
-.cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 480px; margin: auto; }
-.layer-row { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: center; }
-.layer-label { padding: 0 16px 0 0; text-align: left; font-size: 12px; white-space: nowrap; background: none; border: none; color: #243244; cursor: pointer; }
+.cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 260px; margin: auto; }
+.layer-row { position: relative; }
+.layer-label { position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); padding: 0; text-align: left; font-size: 12px; white-space: nowrap; background: none; border: none; color: #243244; cursor: pointer; }
 .layer-label:hover { text-decoration: underline; }
 .layer-label:focus-visible { outline: 2px solid #315c89; outline-offset: 2px; }
 .part-explanation { padding: 24px; }
 .part-explanation h3 { font-size: 14px; margin-bottom: 12px; }
 .part-explanation p { font-size: 13px; }
-.cell-layer { min-height: 26px; }
+.cell-layer { display: block; width: 100%; min-height: 26px; padding: 0; border: none; cursor: pointer; }
 .rear-contact { background: #687788; color: #fff; }
-.silicon { min-height: 90px; background: #324f70; color: #fff; }
+.silicon { display: flex; flex-direction: column; }
+.silicon button { width: 100%; border: none; font-size: 12px; cursor: pointer; }
+.silicon-emitter { min-height: 32px; background: #b8daed; color: #1b3447; }
+.silicon-base { min-height: 84px; background: #324f70; color: #fff; }
+.assembly-area button:focus-visible { outline: 2px solid #172332; outline-offset: 2px; z-index: 1; }
 .coating { min-height: 16px; background: #b4d5df; color: #243244; }
 .front-contacts { background: repeating-linear-gradient(90deg, #9da8b5 0 12px, #edf1f5 12px 48px); color: #172332; }
 .power-box { margin: auto 24px 24px; padding: 18px; border: 1px solid var(--border); background: #fff; }
 .power-box h3 { font-size: 13px; font-weight: 600; }
 .power-value { margin-top: 8px; font-size: 32px; }
 .power-value span { font-size: 16px; color: var(--muted); }
+
+/* On narrow panels, labels sit above the pieces to keep the cell centred. */
+@container (max-width: 640px) {
+  .layer-label { position: static; transform: none; display: block; margin: 8px 0 4px; }
+}
 
 @media (max-width: 800px) {
   .workspace { grid-template-columns: minmax(0, 1fr); }
