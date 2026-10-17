@@ -17,8 +17,8 @@ export default function CellVisualization({ placedPartCount, onPlacePart }: Cell
           onPlacePart(event.dataTransfer.getData('text/plain'))
         }}
       >
+        <div className="assembly-sun" role="img" aria-label="Sun">☀</div>
         <div className="assembly-status" role="status">
-          <div className="assembly-sun" role="img" aria-label="Sun">☀</div>
           <p className="assembly-hint">
             {parts[placedPartCount]
               ? `Drop ${parts[placedPartCount].name.toLowerCase()} here`

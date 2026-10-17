@@ -25,19 +25,19 @@
 .panel-header h2 { font-size: 14px; font-weight: 600; }
 .panel-body { min-height: 320px; display: flex; flex-direction: column; flex: 1; }
 
-.parts-list { padding: 24px; }
-.part { width: 100%; margin-bottom: 10px; padding: 14px; border: 1px solid #7d8996; background: #e1e5e9; color: #243244; cursor: grab; text-align: left; }
+.parts-list { padding: 16px; }
+.part { width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #7d8996; background: #e1e5e9; color: #243244; cursor: grab; text-align: left; font-size: 12px; white-space: nowrap; }
 .part:disabled { opacity: .5; cursor: default; }
 .part:focus-visible { outline: 2px solid #315c89; outline-offset: 3px; }
 .part-hint { margin-top: 12px; color: var(--muted); font-size: 12px; }
-.assembly-area { min-height: 440px; padding: 32px; display: grid; place-items: center; }
+.assembly-area { position: relative; flex: 1; min-height: 440px; padding: 120px 16px 32px; display: grid; place-items: center; }
 .assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
 .assembly-hint { margin-bottom: 24px; }
-.assembly-sun { color: #b17a16; font-size: 72px; line-height: 1; margin-bottom: 32px; padding-left: 120px; }
+.assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #b17a16; font-size: 72px; line-height: 1; }
 /* Reverse the visual order so each new layer sits on top of the previous one. */
 .cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 480px; margin: auto; }
-.layer-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); align-items: center; }
-.layer-label { padding-right: 16px; text-align: left; font-size: 12px; overflow-wrap: anywhere; }
+.layer-row { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: center; }
+.layer-label { padding-right: 16px; text-align: left; font-size: 12px; white-space: nowrap; }
 .cell-layer { min-height: 26px; }
 .rear-contact { background: #687788; color: #fff; }
 .silicon { min-height: 90px; background: #324f70; color: #fff; }
