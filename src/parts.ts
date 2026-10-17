@@ -10,7 +10,7 @@ export const parts = [
   },
   {
     id: 'coating', name: 'Anti-reflection coating',
-    description: 'This thin optical layer reduces the light reflected from the front surface, allowing more light to enter the silicon.',
+    description: 'This thin optical layer reduces the light reflected from the front surface, allowing more light to enter the silicon. Reflection depends on wavelength, the coating material, thickness and angle. Here you choose the reflected percentage directly; the separate thickness slider only changes the drawing.',
   },
   {
     id: 'front-contacts', name: 'Front contacts',

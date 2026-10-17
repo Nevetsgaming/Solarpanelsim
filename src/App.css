@@ -31,7 +31,7 @@
 .part:disabled { opacity: .5; cursor: default; }
 .part:focus-visible { outline: 2px solid #315c89; outline-offset: 3px; }
 .part-hint { margin-top: 12px; color: var(--muted); font-size: 12px; }
-.assembly-area { position: relative; flex: 1; min-height: 440px; padding: 120px 16px 32px; display: grid; place-items: center; background: linear-gradient(#b9def5, #edf7fc); container-type: inline-size; }
+.assembly-area { position: relative; flex: 1; min-height: 490px; padding: 180px 16px 32px; display: grid; place-items: center; background: linear-gradient(#b9def5, #edf7fc); container-type: inline-size; }
 .assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
 .assembly-hint { margin-bottom: 24px; }
 .assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #a66b00; font-size: 72px; line-height: 1; background: none; border: none; padding: 0; cursor: pointer; }
@@ -60,6 +60,10 @@
 .option-control label { display: block; margin-bottom: 6px; }
 .option-control output { display: block; margin-bottom: 6px; }
 .option-control input { width: 100%; margin: 0; accent-color: #315c89; }
+.sun-slider { position: absolute; top: 24px; left: calc(50% + 52px); right: 16px; max-width: 180px; }
+.light-mode-controls { position: absolute; top: 120px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; padding: 0 12px; }
+.light-mode-controls button { padding: 8px; border: 1px solid #7d8996; background: #fff; color: #243244; font-size: 11px; cursor: pointer; }
+.light-mode-controls button[aria-pressed="true"] { background: #243244; color: #fff; }
 .power-box { margin: 0 16px 24px; padding: 18px; border: 1px solid var(--border); background: #fff; }
 .power-box h3 { font-size: 13px; font-weight: 600; }
 .power-value { margin-top: 8px; font-size: 32px; }
@@ -72,6 +76,7 @@
 .top-cell svg { display: block; width: 100%; overflow: hidden; }
 .top-cell[aria-pressed="true"] { outline: 2px solid #ba6c00; outline-offset: 2px; }
 .top-view-caption { margin-top: 12px; font-size: 11px; }
+.contact-detail { display: block; width: min(100%, 180px); margin: 12px auto 0; border: 1px solid #000; }
 .load-resistor { display: block; width: min(100%, 260px); margin: 28px auto 0; padding: 8px; border: 1px solid transparent; background: none; color: #243244; cursor: pointer; font-size: 12px; }
 .load-resistor svg { display: block; width: 100%; margin-bottom: 6px; }
 .load-resistor[aria-pressed="true"] { border-color: #ba6c00; }

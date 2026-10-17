@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "test": "node --test tests/optics.test.ts",
+    "test": "node --test tests/optics.test.ts tests/panelGeometry.test.ts",
     "preview": "vite preview"
   },
   "dependencies": {

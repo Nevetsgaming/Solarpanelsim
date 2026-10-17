@@ -28,9 +28,32 @@ in the single-pass absorption result, but set the generation-capable fraction to
 zero below the cutoff. This sharp cutoff is a teaching approximation, not a
 complete model of phonon-assisted absorption near the silicon band edge.
 
-Absorption is conditional on light entering silicon. Reflection, contact shading,
-rear reflection, carrier collection, and electrical output are not calculated yet.
+Single-pass absorption is conditional on light entering silicon. A direct reflected
+percentage (default 5%, an illustrative assumption) is applied once the coating is
+placed. Before coating placement, front reflection is not modeled. The fraction
+of incident light absorbed is `(1 - reflectedPercent/100) * singlePassAbsorption`.
+Reflection is applied once, not folded into alpha. Contact shading, rear reflection,
+carrier collection, and electrical output are not calculated yet.
 No thickness optimum is imposed: absorption grows with diminishing returns.
 Rear and coating thickness controls remain visual only. Drawn heights are
-exaggerated; contact widths and spacings share a drawing scale of 60 px/mm.
+exaggerated. The active footprint is fixed at 1000 × 1000 mm (1 m²).
+This is a simplified continuous-grid teaching model, not a manufactured module
+with separate silicon cells, gaps, glass, frame, encapsulant and interconnects.
+Top-view SVG coordinates are millimetres; finger width converts from µm to mm.
+Finger width ranges from 20 to 100,000 µm (10 cm; default 60 µm) for exploration;
+the extended range is not a recommendation for a practical grid. Centre spacing
+ranges from 0.5 to 200 mm (default 1.5), with at least a 0.1 mm gap between fingers.
+Increasing width automatically increases spacing if necessary to prevent overlap.
+The default layout has 667 finger centres across the width.
+The 20 × 20 mm contact detail uses the same physical proportions as the overview.
+The cross-section shows a 20 mm-wide slice, with exaggerated vertical heights.
+Two 5 mm busbars at 250 and 750 mm, a 20 µm finger height, and a 0.5 µm emitter
+depth are illustrative fixed assumptions, not an optimized grid or device calibration.
+These dimensions are centralized in `src/panelGeometry.ts`. Area does not change
+the optical fractions or per-area photon rate; electrical outputs remain placeholders.
 Colours identify silicon regions, not net charge. Reset restores all defaults.
+
+The light source buttons select constant-wavelength mode or a sunlight-spectrum
+placeholder. Sunlight mode disables the wavelength slider and hides monochromatic
+readings; it does not yet integrate a solar spectrum. Switching back preserves
+the chosen wavelength. Reset returns to constant-wavelength mode.

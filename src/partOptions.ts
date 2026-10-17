@@ -4,6 +4,7 @@ export const defaultSettings = {
   rearThickness: 20,
   siliconThickness: 180,
   coatingThickness: 80,
+  reflectedPercent: 5,
   fingerWidth: 60,
   fingerSpacing: 1.5,
 }
@@ -20,7 +21,7 @@ type PartOption = {
   step: number
 }
 
-// Wavelength and silicon thickness drive optics; the other settings affect only the drawing.
+// Wavelength, silicon thickness and reflectance drive optics; other settings are visual or stored only.
 export const partOptions: Record<string, PartOption[]> = {
   load: [
     { key: 'loadResistance', label: 'Load resistance', unit: 'Ω', min: 0.1, max: 100, step: 0.1 },
@@ -38,7 +39,7 @@ export const partOptions: Record<string, PartOption[]> = {
     { key: 'coatingThickness', label: 'Coating thickness', unit: 'nm', min: 40, max: 150, step: 1 },
   ],
   'front-contacts': [
-    { key: 'fingerWidth', label: 'Finger width', unit: 'µm', min: 20, max: 120, step: 1 },
-    { key: 'fingerSpacing', label: 'Centre-to-centre spacing', unit: 'mm', min: 0.5, max: 3, step: 0.1 },
+    { key: 'fingerWidth', label: 'Finger width', unit: 'µm', min: 20, max: 100000, step: 1 },
+    { key: 'fingerSpacing', label: 'Centre-to-centre spacing', unit: 'mm', min: 0.5, max: 200, step: 0.1 },
   ],
 }

@@ -37,7 +37,10 @@ export function absorptionCoefficient(wavelengthNm: number) {
   throw new RangeError('Wavelength is outside the table.')
 }
 
-export function calculateOptics(wavelengthNm: number, thicknessUm: number) {
+export function calculateOptics(wavelengthNm: number, thicknessUm: number, reflectedPercent = 0) {
+  if (!Number.isFinite(reflectedPercent) || reflectedPercent < 0 || reflectedPercent > 100) {
+    throw new RangeError('Reflected light must be between 0 and 100 percent.')
+  }
   if (!Number.isFinite(thicknessUm) || thicknessUm < 0) {
     throw new RangeError('Thickness must be a nonnegative number in µm.')
   }
@@ -46,14 +49,20 @@ export function calculateOptics(wavelengthNm: number, thicknessUm: number) {
   const alphaPerCm = absorptionCoefficient(wavelengthNm)
   const thicknessCm = thicknessUm * 1e-4
   const absorbedFraction = -Math.expm1(-alphaPerCm * thicknessCm)
+  const reflectedFraction = reflectedPercent / 100
+  const absorbedIncidentFraction = (1 - reflectedFraction) * absorbedFraction
+  const transmittedIncidentFraction = (1 - reflectedFraction) * (1 - absorbedFraction)
   const canGeneratePairs = wavelengthNm <= bandgapWavelengthNm
 
   return {
     energyEv,
     alphaPerCm,
     absorbedFraction,
+    reflectedFraction,
+    absorbedIncidentFraction,
+    transmittedIncidentFraction,
     canGeneratePairs,
-    usableAbsorbedFraction: canGeneratePairs ? absorbedFraction : 0,
+    usableAbsorbedFraction: canGeneratePairs ? absorbedIncidentFraction : 0,
     photonFlux: incidentPowerPerArea / energyJoules, // photons/(s m²)
   }
 }

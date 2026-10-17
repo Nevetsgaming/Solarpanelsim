@@ -7,9 +7,11 @@ type LearningPanelProps = {
   selectedPartId: string | null
   settings: PartSettings
   hasSilicon: boolean
+  hasCoating: boolean
+  isSunlight: boolean
 }
 
-export default function LearningPanel({ selectedPartId, settings, hasSilicon }: LearningPanelProps) {
+export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight }: LearningPanelProps) {
   const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
 
   return (
@@ -20,7 +22,15 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon }: 
           <p>{selectedPart.description}</p>
         </div>
       )}
-      <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} />
+      {isSunlight ? (
+        <section className="optics-readout" aria-label="Sunlight mode">
+          <h3>Sunlight spectrum</h3>
+          <p>Sunlight contains a mixture of wavelengths, including ultraviolet, visible and infrared light.</p>
+          <p>Single-wavelength readings are hidden in this mode. Solar-spectrum calculations have not been added yet.</p>
+        </section>
+      ) : (
+        <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} reflectedPercent={hasCoating ? settings.reflectedPercent : 0} />
+      )}
     </Panel>
   )
 }

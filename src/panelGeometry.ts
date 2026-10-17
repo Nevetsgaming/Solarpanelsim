@@ -1,0 +1,22 @@
+// Fixed active footprint for this teaching model, not a complete multi-cell module.
+export const panelGeometry = {
+  widthMm: 1000,
+  heightMm: 1000,
+  detailWidthMm: 20,
+  busbarWidthMm: 5,
+  busbarPositionsMm: [250, 750],
+  fingerHeightUm: 20,
+  emitterThicknessUm: 0.5,
+}
+
+export function contactGeometry(fingerWidthUm: number, fingerSpacingMm: number) {
+  const fingerWidthMm = fingerWidthUm / 1000
+  // Centre the first finger half a pitch from the edge; count centres inside the panel.
+  const fingerCount = Math.max(0, Math.ceil(panelGeometry.widthMm / fingerSpacingMm - 0.5))
+  return { fingerWidthMm, fingerSpacingMm, fingerCount }
+}
+
+export function minimumFingerSpacing(fingerWidthUm: number) {
+  // Keep at least a 0.1 mm gap, rounded up to the spacing slider's step.
+  return Math.max(0.5, Math.ceil((fingerWidthUm / 1000 + 0.1) * 10) / 10)
+}

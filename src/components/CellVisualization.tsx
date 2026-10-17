@@ -4,6 +4,7 @@ import TopView from './TopView'
 import Resistor from './Resistor'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
+import { contactGeometry, panelGeometry } from '../panelGeometry'
 
 type CellVisualizationProps = {
   placedPartCount: number
@@ -11,13 +12,17 @@ type CellVisualizationProps = {
   onSelectPart: (partId: string) => void
   settings: PartSettings
   selectedPartId: string | null
+  onReflectedPercentChange: (value: number) => void
+  isSunlight: boolean
+  onLightModeChange: (isSunlight: boolean) => void
 }
 
-export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings, selectedPartId }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings, selectedPartId, onReflectedPercentChange, isSunlight, onLightModeChange }: CellVisualizationProps) {
   const [isTopView, setIsTopView] = useState(false)
-  // Map physical settings to readable drawing sizes. This is not a scale drawing.
-  const fingerWidthPx = settings.fingerWidth / 1000 * 60
-  const fingerSpacingPx = settings.fingerSpacing * 60
+  // The cross-section shows a 20 mm slice; full panel dimensions are in Top view.
+  const { fingerWidthMm } = contactGeometry(settings.fingerWidth, settings.fingerSpacing)
+  const fingerWidthPercent = fingerWidthMm / panelGeometry.detailWidthMm * 100
+  const fingerSpacingPercent = settings.fingerSpacing / panelGeometry.detailWidthMm * 100
 
   return (
     <Panel id="visualization" title="Assembly" headerAction={
@@ -34,6 +39,24 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
         }}
       >
         <button type="button" className="assembly-sun" aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>☀</button>
+        <div className="sun-slider option-control">
+          <label htmlFor="reflectedPercent">Light reflected</label>
+          <output htmlFor="reflectedPercent">{settings.reflectedPercent}%</output>
+          <input
+            id="reflectedPercent"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value={settings.reflectedPercent}
+            aria-valuetext={`${settings.reflectedPercent} percent`}
+            onChange={(event) => onReflectedPercentChange(Number(event.target.value))}
+          />
+        </div>
+        <div className="light-mode-controls" role="group" aria-label="Light source">
+          <button type="button" aria-pressed={!isSunlight} onClick={() => { onLightModeChange(false); onSelectPart('sun') }}>Constant wavelength</button>
+          <button type="button" aria-pressed={isSunlight} onClick={() => { onLightModeChange(true); onSelectPart('sun') }}>Sunlight</button>
+        </div>
         <div className="assembly-status" role="status">
           <p className="assembly-hint">
             {parts[placedPartCount]
@@ -64,12 +87,13 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
                       ? { height: 8 + settings.rearThickness * 0.6 }
                       : part.id === 'coating'
                         ? { height: 4 + settings.coatingThickness * 0.08 }
-                        : { background: `repeating-linear-gradient(90deg, #9da8b5 0 ${fingerWidthPx}px, transparent ${fingerWidthPx}px ${fingerSpacingPx}px)` }}
+                        : { background: `repeating-linear-gradient(90deg, #9da8b5 0 ${fingerWidthPercent}%, transparent ${fingerWidthPercent}% ${fingerSpacingPercent}%)` }}
                   />
                 )}
               </div>
             ))}
           </div>
+          <p className="top-view-caption">20 mm cross-section detail · layer heights exaggerated</p>
           <div className="compact-layer-labels" aria-label="Select an assembled layer">
             {parts.slice(0, placedPartCount).reverse().map((part) => (
               <button type="button" key={part.id} aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>

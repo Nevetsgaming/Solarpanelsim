@@ -63,3 +63,25 @@ test('invalid inputs are rejected instead of extrapolated silently', () => {
     assert.throws(() => calculateOptics(550, thickness), RangeError)
   }
 })
+
+test('reflection reduces incoming-light absorption without changing silicon alpha or photon energy', () => {
+  const unreflected = calculateOptics(1000, 180, 0)
+  const reflected = calculateOptics(1000, 180, 25)
+  approximately(reflected.absorbedIncidentFraction, unreflected.absorbedFraction * 0.75)
+  approximately(reflected.usableAbsorbedFraction, unreflected.usableAbsorbedFraction * 0.75)
+  assert.equal(reflected.alphaPerCm, unreflected.alphaPerCm)
+  assert.equal(reflected.energyEv, unreflected.energyEv)
+  assert.equal(reflected.photonFlux, unreflected.photonFlux)
+})
+
+test('reflected, absorbed and transmitted fractions conserve incoming light', () => {
+  for (const percent of [0, 5, 25, 100]) {
+    const result = calculateOptics(1000, 180, percent)
+    approximately(result.reflectedFraction + result.absorbedIncidentFraction + result.transmittedIncidentFraction, 1)
+  }
+  assert.equal(calculateOptics(550, 180, 100).absorbedIncidentFraction, 0)
+  assert.equal(calculateOptics(1200, 180, 5).usableAbsorbedFraction, 0)
+  for (const percent of [-1, 101, NaN, Infinity]) {
+    assert.throws(() => calculateOptics(550, 180, percent), RangeError)
+  }
+})

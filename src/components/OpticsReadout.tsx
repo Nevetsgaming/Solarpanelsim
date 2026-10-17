@@ -4,10 +4,11 @@ type OpticsReadoutProps = {
   wavelengthNm: number
   thicknessUm: number
   hasSilicon: boolean
+  reflectedPercent: number
 }
 
-export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon }: OpticsReadoutProps) {
-  const optics = calculateOptics(wavelengthNm, thicknessUm)
+export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon, reflectedPercent }: OpticsReadoutProps) {
+  const optics = calculateOptics(wavelengthNm, thicknessUm, reflectedPercent)
   function percentage(fraction: number) {
     const percent = fraction * 100
     return percent > 0 && percent < 0.1 ? percent.toPrecision(2) : percent.toFixed(1)
@@ -30,10 +31,13 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon }:
         <>
           <dl>
             <div><dt>Single-pass absorption</dt><dd>{percentage(optics.absorbedFraction)}%</dd></div>
-            <div><dt>Generation-capable fraction</dt><dd>{percentage(optics.usableAbsorbedFraction)}%</dd></div>
+            <div><dt>Light reflected</dt><dd>{reflectedPercent}%</dd></div>
+            <div><dt>Absorbed, of incoming light</dt><dd>{percentage(optics.absorbedIncidentFraction)}%</dd></div>
+            <div><dt>Generation-capable, of incoming light</dt><dd>{percentage(optics.usableAbsorbedFraction)}%</dd></div>
           </dl>
           <meter min="0" max="1" value={optics.absorbedFraction} aria-label="Fraction absorbed in silicon" />
           <p>Of light entering {thicknessUm} µm of silicon. Try 1000 nm, then increase thickness: absorption gains get smaller.</p>
+          <p>Single-pass absorption counts light that enters silicon. Incoming-light readings also include the reflection loss.</p>
         </>
       ) : <p>Place silicon to measure absorption.</p>}
 

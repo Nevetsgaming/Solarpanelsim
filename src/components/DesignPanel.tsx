@@ -11,9 +11,10 @@ type DesignPanelProps = {
   settings: PartSettings
   onSettingChange: (name: SettingName, value: number) => void
   onReset: () => void
+  isSunlight: boolean
 }
 
-export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset, isSunlight }: DesignPanelProps) {
   const selectedPart = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   return (
     <Panel id="design" title="Parts">
@@ -37,7 +38,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart
         <button type="button" className="part" aria-pressed={selectedPartId === 'load'} onClick={() => onSelectPart('load')}>Load resistance</button>
         <p className="part-hint">Click a part to learn. Drag or click the next part to place it.</p>
       </div>
-      <PartOptions selectedPartId={selectedPartId} settings={settings} onSettingChange={onSettingChange} />
+      <PartOptions selectedPartId={selectedPartId} settings={settings} onSettingChange={onSettingChange} isSunlight={isSunlight} />
       <button type="button" className="reset-button" onClick={onReset}>Reset assembly</button>
       <div className="power-box">
         <h3>Power</h3>
