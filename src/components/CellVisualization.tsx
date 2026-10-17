@@ -4,9 +4,10 @@ import { parts } from '../parts'
 type CellVisualizationProps = {
   placedPartCount: number
   onPlacePart: (partId: string) => void
+  onSelectPart: (partId: string) => void
 }
 
-export default function CellVisualization({ placedPartCount, onPlacePart }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart }: CellVisualizationProps) {
   return (
     <Panel id="visualization" title="Assembly">
       <div
@@ -27,7 +28,7 @@ export default function CellVisualization({ placedPartCount, onPlacePart }: Cell
           <div className="cell-stack">
             {parts.slice(0, placedPartCount).map((part) => (
               <div key={part.id} className="layer-row">
-                <span className="layer-label">{part.name}</span>
+                <button type="button" className="layer-label" onClick={() => onSelectPart(part.id)}>{part.name}</button>
                 <div className={`cell-layer ${part.id}`} aria-hidden="true" />
               </div>
             ))}

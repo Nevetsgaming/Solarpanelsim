@@ -30,14 +30,19 @@
 .part:disabled { opacity: .5; cursor: default; }
 .part:focus-visible { outline: 2px solid #315c89; outline-offset: 3px; }
 .part-hint { margin-top: 12px; color: var(--muted); font-size: 12px; }
-.assembly-area { position: relative; flex: 1; min-height: 440px; padding: 120px 16px 32px; display: grid; place-items: center; }
+.assembly-area { position: relative; flex: 1; min-height: 440px; padding: 120px 16px 32px; display: grid; place-items: center; background: linear-gradient(#b9def5, #edf7fc); }
 .assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
 .assembly-hint { margin-bottom: 24px; }
-.assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #b17a16; font-size: 72px; line-height: 1; }
+.assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #a66b00; font-size: 72px; line-height: 1; }
 /* Reverse the visual order so each new layer sits on top of the previous one. */
 .cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 480px; margin: auto; }
 .layer-row { display: grid; grid-template-columns: 180px minmax(0, 1fr); align-items: center; }
-.layer-label { padding-right: 16px; text-align: left; font-size: 12px; white-space: nowrap; }
+.layer-label { padding: 0 16px 0 0; text-align: left; font-size: 12px; white-space: nowrap; background: none; border: none; color: #243244; cursor: pointer; }
+.layer-label:hover { text-decoration: underline; }
+.layer-label:focus-visible { outline: 2px solid #315c89; outline-offset: 2px; }
+.part-explanation { padding: 24px; }
+.part-explanation h3 { font-size: 14px; margin-bottom: 12px; }
+.part-explanation p { font-size: 13px; }
 .cell-layer { min-height: 26px; }
 .rear-contact { background: #687788; color: #fff; }
 .silicon { min-height: 90px; background: #324f70; color: #fff; }
