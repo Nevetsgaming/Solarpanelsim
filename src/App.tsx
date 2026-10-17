@@ -2,11 +2,17 @@ import { useState } from 'react'
 import DesignPanel from './components/DesignPanel'
 import CellVisualization from './components/CellVisualization'
 import LearningPanel from './components/LearningPanel'
+import { parts } from './parts'
 import './App.css'
 
 // App arranges the page. Each panel owns its own content.
 function App() {
-  const [hasRearContact, setHasRearContact] = useState(false)
+  const [placedPartCount, setPlacedPartCount] = useState(0)
+
+  function placePart(partId: string) {
+    // Only the next layer can be placed, so layers cannot be skipped or duplicated.
+    setPlacedPartCount((count) => parts[count]?.id === partId ? count + 1 : count)
+  }
 
   return (
     <div className="app-shell">
@@ -16,8 +22,8 @@ function App() {
       </header>
       <main>
         <div className="workspace">
-          <DesignPanel hasRearContact={hasRearContact} onPlaceRearContact={() => setHasRearContact(true)} />
-          <CellVisualization hasRearContact={hasRearContact} onPlaceRearContact={() => setHasRearContact(true)} />
+          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} />
+          <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} />
           <LearningPanel />
         </div>
       </main>

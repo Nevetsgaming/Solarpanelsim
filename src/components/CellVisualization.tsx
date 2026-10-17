@@ -1,11 +1,12 @@
 import Panel from './Panel'
+import { parts } from '../parts'
 
 type CellVisualizationProps = {
-  hasRearContact: boolean
-  onPlaceRearContact: () => void
+  placedPartCount: number
+  onPlacePart: (partId: string) => void
 }
 
-export default function CellVisualization({ hasRearContact, onPlaceRearContact }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onPlacePart }: CellVisualizationProps) {
   return (
     <Panel id="visualization" title="Assembly">
       <div
@@ -13,13 +14,20 @@ export default function CellVisualization({ hasRearContact, onPlaceRearContact }
         onDragOver={(event) => event.preventDefault()}
         onDrop={(event) => {
           event.preventDefault()
-          if (event.dataTransfer.getData('text/plain') === 'rear-contact') {
-            onPlaceRearContact()
-          }
+          onPlacePart(event.dataTransfer.getData('text/plain'))
         }}
       >
         <div className="assembly-status" role="status">
-          {hasRearContact ? <div className="rear-contact">Rear contact</div> : 'Drop the rear contact here'}
+          <p className="assembly-hint">
+            {parts[placedPartCount]
+              ? `Drop ${parts[placedPartCount].name.toLowerCase()} here`
+              : 'Cell assembled'}
+          </p>
+          <div className="cell-stack">
+            {parts.slice(0, placedPartCount).map((part) => (
+              <div key={part.id} className={`cell-layer ${part.id}`}>{part.name}</div>
+            ))}
+          </div>
         </div>
       </div>
     </Panel>

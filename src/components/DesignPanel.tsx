@@ -1,27 +1,31 @@
 import Panel from './Panel'
+import { parts } from '../parts'
 
 type DesignPanelProps = {
-  hasRearContact: boolean
-  onPlaceRearContact: () => void
+  placedPartCount: number
+  onPlacePart: (partId: string) => void
 }
 
-export default function DesignPanel({ hasRearContact, onPlaceRearContact }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart }: DesignPanelProps) {
   return (
     <Panel id="design" title="Parts">
       <div className="parts-list">
-        <button
-          className="part"
-          type="button"
-          draggable={!hasRearContact}
-          disabled={hasRearContact}
-          onDragStart={(event) => {
-            event.dataTransfer.setData('text/plain', 'rear-contact')
-            event.dataTransfer.effectAllowed = 'copy'
-          }}
-          onClick={onPlaceRearContact}
-        >
-          Rear contact
-        </button>
+        {parts.map((part, index) => (
+          <button
+            key={part.id}
+            className="part"
+            type="button"
+            draggable={index === placedPartCount}
+            disabled={index !== placedPartCount}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', part.id)
+              event.dataTransfer.effectAllowed = 'copy'
+            }}
+            onClick={() => onPlacePart(part.id)}
+          >
+            {part.name}
+          </button>
+        ))}
         <p className="part-hint">Drag into the middle, or click to place.</p>
       </div>
     </Panel>
