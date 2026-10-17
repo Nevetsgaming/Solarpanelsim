@@ -12,10 +12,6 @@ function App() {
 
       </header>
       <main>
-        <div className="workspace-heading">
-
-    
-        </div>
         <div className="workspace">
           <DesignPanel />
           <CellVisualization />

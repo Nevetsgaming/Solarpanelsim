@@ -1,12 +1,12 @@
 :root {
-  font-family: Inter, 'Segoe UI', system-ui, sans-serif;
-  color: #213d36;
-  background: #f5f6f1;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #243244;
+  background: #eef1f4;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --muted: #64736b;
-  --border: #e1e6dd;
+  --muted: #5e6c7b;
+  --border: #cbd2da;
 }
 
 * { box-sizing: border-box; }
