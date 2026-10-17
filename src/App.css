@@ -25,6 +25,15 @@
 .panel-header h2 { font-size: 14px; font-weight: 600; }
 .panel-body { min-height: 320px; }
 
+.parts-list { padding: 24px; }
+.part { width: 100%; padding: 14px; border: 1px solid #7d8996; background: #e1e5e9; color: #243244; cursor: grab; text-align: left; }
+.part:disabled { opacity: .5; cursor: default; }
+.part:focus-visible { outline: 2px solid #315c89; outline-offset: 3px; }
+.part-hint { margin-top: 12px; color: var(--muted); font-size: 12px; }
+.assembly-area { min-height: 440px; padding: 32px; display: grid; place-items: center; }
+.assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
+.rear-contact { width: 100%; max-width: 360px; margin: auto; padding: 12px; background: #687788; color: #fff; border: 1px solid #4b596a; }
+
 @media (max-width: 800px) {
   .workspace { grid-template-columns: minmax(0, 1fr); }
   .panel-header { padding: 16px 20px; }
