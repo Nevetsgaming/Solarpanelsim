@@ -18,6 +18,7 @@ export default function CellVisualization({ placedPartCount, onPlacePart }: Cell
         }}
       >
         <div className="assembly-status" role="status">
+          <div className="assembly-sun" role="img" aria-label="Sun">☀</div>
           <p className="assembly-hint">
             {parts[placedPartCount]
               ? `Drop ${parts[placedPartCount].name.toLowerCase()} here`
@@ -25,7 +26,10 @@ export default function CellVisualization({ placedPartCount, onPlacePart }: Cell
           </p>
           <div className="cell-stack">
             {parts.slice(0, placedPartCount).map((part) => (
-              <div key={part.id} className={`cell-layer ${part.id}`}>{part.name}</div>
+              <div key={part.id} className="layer-row">
+                <span className="layer-label">{part.name}</span>
+                <div className={`cell-layer ${part.id}`} aria-hidden="true" />
+              </div>
             ))}
           </div>
         </div>

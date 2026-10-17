@@ -19,11 +19,11 @@
   background: var(--border);
 }
 
-.panel { min-width: 0; background: #f5f6f8; }
+.panel { min-width: 0; background: #f5f6f8; display: flex; flex-direction: column; }
 .panel:nth-child(2) { background: #fff; }
 .panel-header { padding: 18px 24px; border-bottom: 1px solid var(--border); }
 .panel-header h2 { font-size: 14px; font-weight: 600; }
-.panel-body { min-height: 320px; }
+.panel-body { min-height: 320px; display: flex; flex-direction: column; flex: 1; }
 
 .parts-list { padding: 24px; }
 .part { width: 100%; margin-bottom: 10px; padding: 14px; border: 1px solid #7d8996; background: #e1e5e9; color: #243244; cursor: grab; text-align: left; }
@@ -33,13 +33,20 @@
 .assembly-area { min-height: 440px; padding: 32px; display: grid; place-items: center; }
 .assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
 .assembly-hint { margin-bottom: 24px; }
+.assembly-sun { color: #b17a16; font-size: 72px; line-height: 1; margin-bottom: 32px; padding-left: 120px; }
 /* Reverse the visual order so each new layer sits on top of the previous one. */
-.cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 360px; margin: auto; }
-.cell-layer { padding: 12px; }
+.cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 480px; margin: auto; }
+.layer-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); align-items: center; }
+.layer-label { padding-right: 16px; text-align: left; font-size: 12px; overflow-wrap: anywhere; }
+.cell-layer { min-height: 26px; }
 .rear-contact { background: #687788; color: #fff; }
-.silicon { padding: 36px 12px; background: #324f70; color: #fff; }
-.coating { padding: 6px 12px; background: #b4d5df; color: #243244; }
+.silicon { min-height: 90px; background: #324f70; color: #fff; }
+.coating { min-height: 16px; background: #b4d5df; color: #243244; }
 .front-contacts { background: repeating-linear-gradient(90deg, #9da8b5 0 12px, #edf1f5 12px 48px); color: #172332; }
+.power-box { margin: auto 24px 24px; padding: 18px; border: 1px solid var(--border); background: #fff; }
+.power-box h3 { font-size: 13px; font-weight: 600; }
+.power-value { margin-top: 8px; font-size: 32px; }
+.power-value span { font-size: 16px; color: var(--muted); }
 
 @media (max-width: 800px) {
   .workspace { grid-template-columns: minmax(0, 1fr); }

@@ -28,6 +28,10 @@ export default function DesignPanel({ placedPartCount, onPlacePart }: DesignPane
         ))}
         <p className="part-hint">Drag into the middle, or click to place.</p>
       </div>
+      <div className="power-box">
+        <h3>Power</h3>
+        <p className="power-value" aria-label="Power not yet calculated">— <span>W</span></p>
+      </div>
     </Panel>
   )
 }
