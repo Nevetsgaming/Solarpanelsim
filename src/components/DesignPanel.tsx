@@ -1,12 +1,17 @@
 import Panel from './Panel'
 import { parts } from '../parts'
+import PartOptions from './PartOptions'
+import type { PartSettings, SettingName } from '../partOptions'
 
 type DesignPanelProps = {
   placedPartCount: number
   onPlacePart: (partId: string) => void
+  selectedPartId: string | null
+  settings: PartSettings
+  onSettingChange: (name: SettingName, value: number) => void
 }
 
-export default function DesignPanel({ placedPartCount, onPlacePart }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart, selectedPartId, settings, onSettingChange }: DesignPanelProps) {
   return (
     <Panel id="design" title="Parts">
       <div className="parts-list">
@@ -27,6 +32,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart }: DesignPane
         ))}
         <p className="part-hint">Click a part to learn. Drag or click the next part to place it.</p>
       </div>
+      <PartOptions selectedPartId={selectedPartId} settings={settings} onSettingChange={onSettingChange} />
       <div className="power-box">
         <h3>Power</h3>
         <p className="power-value" aria-label="Power not yet calculated">— <span>W</span></p>

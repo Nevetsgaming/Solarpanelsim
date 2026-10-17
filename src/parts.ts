@@ -26,10 +26,10 @@ export const learningTopics = [
   },
   {
     id: 'emitter', name: 'n-type emitter',
-    description: 'The thin front region is doped so electrons are its majority mobile carriers. It forms a p–n junction with the p-type base and provides a path to the front contacts. The region is electrically neutral overall, not a negatively charged slab.',
+    description: 'Silicon atoms share electrons in bonds. In the thin front region, a few added atoms bring an extra electron that can move easily. This is called n-type silicon: most moving charge carriers are electrons. Where it meets p-type silicon, a junction helps separate the electrons and holes created by light. The region as a whole is electrically neutral.',
   },
   {
     id: 'base', name: 'p-type base',
-    description: 'The thicker silicon region absorbs much of the incoming usable light. Doping makes holes its majority mobile carriers. A hole is a missing electron that behaves as a positive mobile carrier. The base is electrically neutral overall, not a positively charged slab.',
+    description: 'In the thicker base, a few added atoms leave an electron missing from a bond. Think of that gap as an empty seat: when a neighbouring electron fills it, the empty seat moves to where that electron came from. This moving gap is a hole and behaves like a positive charge carrier. In p-type silicon, holes are the majority mobile carriers. The base absorbs much of the usable light and is electrically neutral overall.',
   },
 ]

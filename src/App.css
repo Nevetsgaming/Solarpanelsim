@@ -44,15 +44,22 @@
 .part-explanation { padding: 24px; }
 .part-explanation h3 { font-size: 14px; margin-bottom: 12px; }
 .part-explanation p { font-size: 13px; }
-.cell-layer { display: block; width: 100%; min-height: 26px; padding: 0; border: none; cursor: pointer; }
+.cell-layer { display: block; width: 100%; padding: 0; border: none; cursor: pointer; }
 .rear-contact { background: #687788; color: #fff; }
 .silicon { display: flex; flex-direction: column; }
 .silicon button { width: 100%; border: none; font-size: 12px; cursor: pointer; }
 .silicon-emitter { min-height: 32px; background: #b8daed; color: #1b3447; }
-.silicon-base { min-height: 84px; background: #324f70; color: #fff; }
+.silicon-base { background: #324f70; color: #fff; }
 .assembly-area button:focus-visible { outline: 2px solid #172332; outline-offset: 2px; z-index: 1; }
-.coating { min-height: 16px; background: #b4d5df; color: #243244; }
-.front-contacts { background: repeating-linear-gradient(90deg, #9da8b5 0 12px, #edf1f5 12px 48px); color: #172332; }
+.coating { background: #b4d5df; color: #243244; }
+.front-contacts { height: 26px; }
+.part-options { margin: 0 16px 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+.part-options h3 { font-size: 13px; margin-bottom: 16px; }
+.part-options p { font-size: 11px; color: var(--muted); }
+.option-control { margin-bottom: 18px; font-size: 12px; }
+.option-control label { display: block; margin-bottom: 6px; }
+.option-control output { display: block; margin-bottom: 6px; }
+.option-control input { width: 100%; margin: 0; accent-color: #315c89; }
 .power-box { margin: auto 24px 24px; padding: 18px; border: 1px solid var(--border); background: #fff; }
 .power-box h3 { font-size: 13px; font-weight: 600; }
 .power-value { margin-top: 8px; font-size: 32px; }
