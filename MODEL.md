@@ -3,6 +3,32 @@
 Calculations live in `src/physics/optics.ts` and do not depend on React or the drawing.
 Run their checks with `npm test` (Node.js 24 supports these TypeScript files directly).
 
+## Learning and comparison controls
+
+Finger width uses a logarithmic 20–250,000 µm slider, with an exact numeric input.
+Large widths display in mm or cm; the exact input stays in µm. Rear-contact and
+coating thickness are marked Appearance only. Part descriptions and formula
+explanations show a short takeaway first, with optional details.
+
+The finger-width challenge assembles the default design in sunlight/maximum-power
+mode and freezes all settings except width. Its baseline is calculated from that
+same design, not a hard-coded target. Reset or undo ends the challenge.
+Free experimentation and saving resume when the challenge ends.
+
+One saved design stores a copy of settings, light mode, operating mode and results
+in React memory until refresh. It can be restored; changing source or operating
+mode is flagged as an unfair design comparison. Before/after feedback reports
+computed shading, total series resistance and power changes rather than guessing
+whether a slider movement helped.
+
+The light budget counts photons, not energy efficiency. It separates metal
+shading, reflection, below-bandgap photons, usable but unabsorbed photons and
+usable absorbed photons. All five fractions sum to one. Below-bandgap photons
+remain in their own category even if the absorption data records some absorption;
+only energetic, absorbed photons can generate charge here. These counts precede
+collection and electrical losses. The I–V plot uses the same diode equation and
+series resistance as the solver, with selected and maximum-power points marked.
+
 ## Data and units
 
 Silicon alpha values are from M. A. Green, *Self-consistent optical parameters of

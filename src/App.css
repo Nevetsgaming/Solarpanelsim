@@ -73,6 +73,22 @@
 .contact-feedback dl > div { display: flex; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
 .contact-feedback dd { margin: 0; font-family: var(--mono); white-space: nowrap; }
 .contact-feedback p { margin-top: .6rem; color: var(--muted); }
+.appearance-label { display: block; margin-top: .2rem; font-size: .6rem; color: var(--muted); font-weight: 400; }
+.contact-feedback input[type='number'] { width: 100%; padding: .5rem; margin: .3rem 0 .7rem; border: 1px solid var(--border); border-radius: 4px; font: inherit; background: #fff; }
+.assembly-rule { margin: 0 1.2rem 1rem; font-size: .65rem; color: var(--muted); }
+.small-note { color: var(--muted); font-size: .65rem; }
+.experiment-panel, .iv-curve { margin: 1rem 1.3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .73rem; line-height: 1.7; }
+.experiment-panel h3 { font-size: .85rem; }
+.experiment-panel h4 { font-size: .75rem; }
+.experiment-panel p { margin: .6rem 0; }
+.experiment-panel button { min-height: 44px; padding: .5rem .7rem; background: #f0f5fc; border: 1px solid var(--border); border-radius: 5px; color: #25364b; font: inherit; cursor: pointer; }
+.experiment-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .8rem; }
+.experiment-feedback { margin-top: 1rem; padding: .7rem; background: #f0f5fc; border-radius: 5px; }
+.saved-design { margin-top: .8rem; }
+.part-detail { margin-top: .6rem; font-size: .75rem; }
+.part-detail summary, .saved-design summary, .iv-curve summary, .term-explanation summary { cursor: pointer; padding: .3rem 0; }
+.iv-curve svg { display: block; width: 100%; margin: .5rem 0; }
+button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 .assembly-actions { display: flex; gap: .5rem; margin: 0 1.2rem .75rem; }
 .reset-button { flex: 1; min-height: 2.75rem; border: 1px solid var(--border); border-radius: 8px; background: #f8f9fb; font-size: .74rem; cursor: pointer; }
 .reset-button:hover:not(:disabled) { background: #edf1f6; }
@@ -108,7 +124,7 @@
 .formula-dialog-header h2 { font-size: 1.1rem; }
 .formula-close { flex-shrink: 0; width: 44px; height: 44px; border: none; border-radius: 8px; background: #f0f3f7; font-size: 1.6rem; cursor: pointer; }
 .formula-instruction { margin: 1rem 0; color: var(--muted); font-size: .76rem; }
-.formula-line { padding: 1rem .25rem; overflow-x: auto; font-size: clamp(.82rem, 1.5vw, 1rem); line-height: 2.5; white-space: nowrap; }
+.formula-line { padding: 1rem .25rem; overflow-x: auto; font-family: 'Cambria Math', 'Times New Roman', serif; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 2.5; white-space: nowrap; }
 .formula-term { display: inline; padding: .1rem .12rem; border: none; border-radius: 4px; color: #205ba8; background: #edf4ff; cursor: help; font: inherit; line-height: inherit; }
 .formula-term:hover, .formula-term:focus-visible { color: #fff; background: #2468c9; }
 .formula-term sub, .formula-term sup { font-size: .7em; }
@@ -146,7 +162,10 @@
 .circuit-choices button { padding: .5rem; min-height: 44px; border: 1px solid var(--border); border-radius: 5px; background: #fff; color: #25364b; font-size: .68rem; cursor: pointer; }
 .circuit-choices button[aria-pressed='true'] { background: #eaf2ff; border-color: #2468c9; }
 .circuit-explanation { padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
-.circuit-component-formula { font-family: var(--mono); overflow-wrap: anywhere; }
+.circuit-component-formula, .circuit-current-formula .formula-line { font-family: 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif; font-size: clamp(1.1rem, 2vw, 1.4rem); line-height: 2.5; letter-spacing: .02em; }
+.circuit-component-formula { overflow-x: auto; white-space: nowrap; }
+.circuit-view sub { font-size: .7em; }
+.circuit-component-formula sup, .circuit-current-formula .formula-line sup { display: inline-block; vertical-align: super; font-size: .65em; line-height: 1; }
 .circuit-current-formula { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
 .circuit-selected-term { background: #dceaff; color: #174f9d; border-radius: 3px; padding: .2rem; }
 .view-controls button, .light-mode-controls button { min-height: 2.5rem; padding: .35rem .65rem; border: none; border-radius: 6px; background: none; color: #657282; font-size: .7rem; font-weight: 550; cursor: pointer; }

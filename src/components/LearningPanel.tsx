@@ -5,6 +5,7 @@ import type { PartSettings } from '../partOptions'
 import { calculateOptics } from '../physics/optics'
 import { solarPhotonFlux } from '../physics/spectrum'
 import type { ElectricalResults } from '../physics/electrical'
+import type { ReactNode } from 'react'
 
 type LearningPanelProps = {
   selectedPartId: string | null
@@ -13,9 +14,11 @@ type LearningPanelProps = {
   hasCoating: boolean
   isSunlight: boolean
   electrical: ElectricalResults
+  experiment?: ReactNode
+  curve?: ReactNode
 }
 
-export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight, electrical }: LearningPanelProps) {
+export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight, electrical, experiment, curve }: LearningPanelProps) {
   const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
   const sunReadings = selectedPartId === 'sun' && !isSunlight
     ? calculateOptics(settings.wavelengthNm, settings.siliconThickness) : null
@@ -26,6 +29,7 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
         <div className="part-explanation">
           <h3>{selectedPart.name}</h3>
           <p>{selectedPart.description}</p>
+          {selectedPart.detail && <details className="part-detail"><summary>Why it works</summary><p>{selectedPart.detail}</p></details>}
           {sunReadings && (
             <dl className="sun-readings">
               <div><dt>Photon energy</dt><dd>{sunReadings.energyEv.toFixed(3)} eV</dd></div>
@@ -38,6 +42,8 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
       )}
       {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Click a layer, the sun, or the resistor. We’ll look at what it does and how it helps the cell work.</p></div>}
       <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} reflectedPercent={hasCoating ? settings.reflectedPercent : 0} isSunlight={isSunlight} unshadedFraction={electrical.assembled ? electrical.unshadedFraction : 1} />
+      {experiment}
+      {curve}
     </Panel>
   )
 }

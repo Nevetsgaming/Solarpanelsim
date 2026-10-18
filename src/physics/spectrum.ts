@@ -15,6 +15,15 @@ export const solarPhotonFlux = solarSpectrum.slice(1).reduce((sum, [wavelength, 
   return sum + (irradiance / photonEnergyJoules(wavelength) + previousIrradiance / photonEnergyJoules(previousWavelength)) / 2 * (wavelength - previousWavelength) * normalization
 }, 0)
 
+// Photon count above the bandgap, whether or not the silicon absorbs them.
+export const usableSolarPhotonFlux = solarSpectrum.slice(1).reduce((sum, [end, endIrradiance], index) => {
+  const [start, startIrradiance] = solarSpectrum[index]
+  if (start >= bandgapWavelengthNm) return sum
+  const upper = Math.min(end, bandgapWavelengthNm)
+  const upperIrradiance = startIrradiance + (endIrradiance - startIrradiance) * (upper - start) / (end - start)
+  return sum + (startIrradiance / photonEnergyJoules(start) + upperIrradiance / photonEnergyJoules(upper)) / 2 * (upper - start) * normalization
+}, 0)
+
 export function absorbedSolarPhotonFlux(thicknessUm: number) {
   if (!Number.isFinite(thicknessUm) || thicknessUm < 0) throw new RangeError('Thickness must be nonnegative and finite.')
   const thicknessCm = thicknessUm * 1e-4

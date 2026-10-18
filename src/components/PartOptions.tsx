@@ -3,6 +3,7 @@ import { partOptions } from '../partOptions'
 import type { PartSettings, SettingName } from '../partOptions'
 import { contactGeometry, panelGeometry } from '../panelGeometry'
 import type { ElectricalResults } from '../physics/electrical'
+import { formatWidth, widthFromSlider, widthToSlider } from '../experiments'
 
 type PartOptionsProps = {
   selectedPartId: string | null
@@ -10,9 +11,10 @@ type PartOptionsProps = {
   onSettingChange: (name: SettingName, value: number) => void
   isSunlight: boolean
   electrical: ElectricalResults
+  challengeActive?: boolean
 }
 
-export default function PartOptions({ selectedPartId, settings, onSettingChange, isSunlight, electrical }: PartOptionsProps) {
+export default function PartOptions({ selectedPartId, settings, onSettingChange, isSunlight, electrical, challengeActive = false }: PartOptionsProps) {
   // The emitter and base are regions of the same silicon part.
   const partId = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   const selectedPart = learningTopics.find((part) => part.id === partId)
@@ -23,26 +25,39 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
       <h3 id="options-title">{selectedPart ? `${selectedPart.name} options` : 'Part options'}</h3>
       {options ? options.map((option) => (
         <div className="option-control" key={option.key}>
-          <label htmlFor={option.key}>{option.label}</label>
-          <output htmlFor={option.key}>{settings[option.key]} {option.unit}</output>
+          <label htmlFor={option.key}>{option.label}{option.appearanceOnly && <span className="appearance-label">Appearance only</span>}</label>
+          <output htmlFor={option.key}>{option.key === 'fingerWidth' ? formatWidth(settings.fingerWidth) : `${settings[option.key]} ${option.unit}`}</output>
           <input
             id={option.key}
             type="range"
-            min={option.logarithmic ? Math.log10(option.min) : option.min}
-            max={option.logarithmic ? Math.log10(option.max) : option.max}
-            step={option.logarithmic ? 0.01 : option.step}
-            value={option.logarithmic ? Math.log10(settings[option.key]) : settings[option.key]}
+            disabled={challengeActive && option.key !== 'fingerWidth'}
+            min={option.key === 'fingerWidth' ? 0 : option.logarithmic ? Math.log10(option.min) : option.min}
+            max={option.key === 'fingerWidth' ? 1000 : option.logarithmic ? Math.log10(option.max) : option.max}
+            step={option.key === 'fingerWidth' ? 1 : option.logarithmic ? 0.01 : option.step}
+            value={option.key === 'fingerWidth' ? widthToSlider(settings.fingerWidth) : option.logarithmic ? Math.log10(settings[option.key]) : settings[option.key]}
             aria-valuetext={`${settings[option.key]} ${option.unit}`}
-            onChange={(event) => onSettingChange(option.key, option.logarithmic ? Number((10 ** Number(event.target.value)).toPrecision(4)) : Number(event.target.value))}
+            onChange={(event) => {
+              const raw = option.key === 'fingerWidth' ? widthFromSlider(Number(event.target.value)) : option.logarithmic ? 10 ** Number(event.target.value) : Number(event.target.value)
+              const value = option.key === 'fingerWidth' ? Math.round(raw) : Number(raw.toPrecision(6))
+              onSettingChange(option.key, Math.max(option.min, Math.min(option.max, value)))
+            }}
           />
           {option.key === 'fingerWidth' && (
             <div className="contact-feedback">
+              <label htmlFor="finger-width-exact">Exact width (µm)</label>
+              <input key={settings.fingerWidth} id="finger-width-exact" type="number" min={option.min} max={option.max} step="1" defaultValue={settings.fingerWidth}
+                onKeyDown={(event) => { if (event.key === 'Enter') event.currentTarget.blur() }}
+                onBlur={(event) => {
+                  const value = event.currentTarget.valueAsNumber
+                  if (Number.isFinite(value) && value >= option.min && value <= option.max) onSettingChange('fingerWidth', Math.round(value))
+                  else event.currentTarget.value = String(settings.fingerWidth)
+                }} />
               <dl>
                 <div><dt>Light blocked by contacts</dt><dd>{((1 - electrical.unshadedFraction) * 100).toFixed(2)}%</dd></div>
                 <div><dt>Finger resistance</dt><dd>{electrical.fingerResistance.toExponential(2)} Ω</dd></div>
               </dl>
               <p>Wider fingers block more sunlight, but give current an easier path. Watch the two readings as you change the width.</p>
-              <p>Can you find a width that produces more power? Check the power box on the right.</p>
+              <p>The slider uses a logarithmic scale for fine control. You can also type an exact width above.</p>
             </div>
           )}
         </div>
@@ -54,9 +69,9 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
       {options && <p>{partId === 'sun'
         ? isSunlight ? 'Sunlight mixes many wavelengths together. Choose Constant wavelength if you want to explore one at a time with the slider beside the sun.' : 'Use the slider beside the sun to change the wavelength. We keep the incoming light power the same, so you can compare wavelengths fairly.'
         : partId === 'load'
-          ? 'Move this slider to choose the resistor connected to your cell. Each equal step changes resistance by a ratio, rather than a fixed amount, so the slider can cover 0.0001–100 Ω. Changing it switches to Resistor load mode.'
+          ? 'Choose the resistor connected to your cell. The logarithmic slider covers small and large loads; moving it selects Resistor load mode.'
         : partId === 'silicon'
-          ? 'Thicker silicon gives light more material to travel through, so more of it can be absorbed. We count one pass through the silicon, and exaggerate the drawing’s height so you can see the change.'
+          ? 'Thicker silicon absorbs more light, with diminishing gains. This model does not add a penalty for thickness, so there is no thickness optimum to find. Drawing not to scale.'
         : partId === 'coating'
           ? 'Choose how much light bounces away using the reflection slider. Changing the thickness only changes the picture here; it does not calculate a new reflected percentage.'
         : partId === 'front-contacts'

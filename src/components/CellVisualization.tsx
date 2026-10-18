@@ -24,9 +24,10 @@ type CellVisualizationProps = {
   operatingMode: OperatingMode
   onOperatingModeChange: (mode: OperatingMode) => void
   onExplore: (topic: ReadingTopic) => void
+  challengeActive: boolean
 }
 
-export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange, electrical, operatingMode, onOperatingModeChange, onExplore }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange, electrical, operatingMode, onOperatingModeChange, onExplore, challengeActive }: CellVisualizationProps) {
   const [view, setView] = useState<'cross-section' | 'top' | 'circuit'>('cross-section')
   const { sectionWidthMm } = contactSection(settings.fingerWidth, settings.fingerSpacing)
 
@@ -38,7 +39,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
         <button type="button" aria-pressed={view === 'circuit'} onClick={() => setView('circuit')}>Circuit view</button>
       </div>
     }>
-      <div className="canvas-readings"><PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplore} /></div>
+      <div className="canvas-readings"><PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplore} lockedMode={challengeActive} /></div>
       <div className="assembly-area" data-drop-zone>
         <button type="button" className="assembly-sun" style={{ color: isSunlight ? '#c49327' : wavelengthColour(settings.wavelengthNm) }} aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>
           <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="13" fill="currentColor" /><path d="M32 3V10 M32 54V61 M3 32H10 M54 32H61 M11 11L16 16 M48 48L53 53 M11 53L16 48 M48 16L53 11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
@@ -50,8 +51,8 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
             aria-valuetext={`${settings.wavelengthNm} nanometres`} onChange={(event) => onWavelengthChange(Number(event.target.value))} />
         </div>
         <div className="light-mode-controls" role="group" aria-label="Light source">
-          <button type="button" aria-pressed={!isSunlight} onClick={() => { onLightModeChange(false); onSelectPart('sun') }}>Constant wavelength</button>
-          <button type="button" aria-pressed={isSunlight} onClick={() => { onLightModeChange(true); onSelectPart('sun') }}>Sunlight</button>
+          <button type="button" disabled={challengeActive} aria-pressed={!isSunlight} onClick={() => { onLightModeChange(false); onSelectPart('sun') }}>Constant wavelength</button>
+          <button type="button" disabled={challengeActive} aria-pressed={isSunlight} onClick={() => { onLightModeChange(true); onSelectPart('sun') }}>Sunlight</button>
         </div>
 
         <div className="assembly-status">
