@@ -18,9 +18,7 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon, r
     <section className="optics-readout" aria-labelledby="optics-title">
       <h3 id="optics-title">Light & absorption</h3>
       <dl>
-        <div><dt>Photon energy</dt><dd>{optics.energyEv.toFixed(3)} eV</dd></div>
         <div><dt>Silicon bandgap</dt><dd>{siliconBandgapEv} eV</dd></div>
-        <div><dt>Incoming photon rate</dt><dd>{optics.photonFlux.toExponential(2)} /s/m²</dd></div>
       </dl>
       <p>{optics.canGeneratePairs
         ? 'Enough energy to generate an electron–hole pair if absorbed.'
@@ -36,8 +34,6 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon, r
             <div><dt>Generation-capable, of incoming light</dt><dd>{percentage(optics.usableAbsorbedFraction)}%</dd></div>
           </dl>
           <meter min="0" max="1" value={optics.absorbedFraction} aria-label="Fraction absorbed in silicon" />
-          <p>Of light entering {thicknessUm} µm of silicon. Try 1000 nm, then increase thickness: absorption gains get smaller.</p>
-          <p>Single-pass absorption counts light that enters silicon. Incoming-light readings also include the reflection loss.</p>
         </>
       ) : <p>Place silicon to measure absorption.</p>}
 

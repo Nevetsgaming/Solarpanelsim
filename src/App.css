@@ -50,7 +50,7 @@
 .part:active { background: #e4eaf2; box-shadow: inset 0 0 0 1px #c8d3e0; }
 .part[aria-pressed='true'] { background: #eaf2ff; color: #1f58a7; }
 .part[data-placeable='true'] { cursor: grab; touch-action: none; }
-.part-name { font-size: .76rem; font-weight: 550; white-space: nowrap; }
+.part-name { font-size: .72rem; font-weight: 550; white-space: nowrap; }
 .part-state { margin-left: auto; font-size: .9rem; color: #75869a; }
 .part-thumbnail { display: block; flex: 0 0 2rem; height: 1.45rem; border-radius: 3px; border: 1px solid rgb(0 0 0 / 20%); box-shadow: 0 2px 2px rgb(20 35 50 / 5%); }
 .thumbnail-rear-contact { background: #8a96a2; }
@@ -129,6 +129,10 @@
 .part-explanation, .inspector-empty { padding: 1.3rem; }
 .part-explanation h3, .inspector-empty h3 { font-size: 1.1rem; letter-spacing: -.025em; line-height: 1.25; margin-bottom: .8rem; font-weight: 600; }
 .part-explanation p, .inspector-empty p { color: #5d6977; font-size: .8rem; line-height: 1.8; }
+.sun-readings { margin: 1rem 0 0; font-size: .73rem; }
+.sun-readings > div { margin-top: .8rem; }
+.sun-readings dt { color: var(--muted); }
+.sun-readings dd { margin: .2rem 0 0; font-variant-numeric: tabular-nums; }
 .optics-readout { margin: 0 1.3rem; padding: 1.2rem 0; border-top: 1px solid var(--border); font-size: .75rem; }
 .optics-readout h3 { font-size: .8rem; font-weight: 650; margin-bottom: 1.2rem; }
 .optics-readout dl { margin: 0 0 1rem; }
@@ -162,7 +166,7 @@
 }
 @media (max-width: 480px) {
   .app-header { padding: 0 1rem; }
-  .project-meta { font-size: .65rem; gap: .3rem; }
+  .project-meta { display: none; }
   .brand { font-size: .95rem; }
   .parts-list { grid-template-columns: minmax(0, 1fr); }
   .panel-header { padding-inline: 1rem; }

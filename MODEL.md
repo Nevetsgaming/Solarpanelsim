@@ -46,10 +46,11 @@ ranges from 0.5 to 200 mm (default 1.5), with at least a 0.1 mm gap between fing
 Increasing width automatically increases spacing if necessary to prevent overlap.
 The default layout has 667 finger centres across the width.
 The 20 × 20 mm contact detail uses the same physical proportions as the overview.
-The cross-section runs along one finger for the full 1 m length. It shows the
-continuous finger and its two busbar crossings using the same 5 mm busbar widths
-and 250/750 mm positions as Top view. Vertical heights are exaggerated. Finger
-width and spacing lie out of this cut plane and are inspected in Top view.
+The cross-section cuts across fingers, between the busbars, so finger width and
+spacing are visible and respond to their sliders. It shows a 20 mm detail, widening
+to three pitches when necessary for large contacts (up to the panel width).
+Vertical heights and a 1 px black outline are exaggerated for visibility. Busbars
+remain visible in Top view; this cut does not pass through them.
 Two 5 mm busbars at 250 and 750 mm, a 20 µm finger height, and a 0.5 µm emitter
 depth are illustrative fixed assumptions, not an optimized grid or device calibration.
 These dimensions are centralized in `src/panelGeometry.ts`. Area does not change

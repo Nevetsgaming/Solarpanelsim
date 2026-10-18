@@ -20,3 +20,14 @@ export function minimumFingerSpacing(fingerWidthUm: number) {
   // Keep at least a 0.1 mm gap, rounded up to the spacing slider's step.
   return Math.max(0.5, Math.ceil((fingerWidthUm / 1000 + 0.1) * 10) / 10)
 }
+
+export function contactSection(fingerWidthUm: number, fingerSpacingMm: number) {
+  const { fingerWidthMm } = contactGeometry(fingerWidthUm, fingerSpacingMm)
+  // Widen the detail when large fingers would otherwise fill the entire crop.
+  const sectionWidthMm = Math.min(panelGeometry.widthMm, Math.max(panelGeometry.detailWidthMm, fingerSpacingMm * 3))
+  const fingers = Array.from({ length: Math.ceil(sectionWidthMm / fingerSpacingMm) }, (_, index) => {
+    const centre = (index + 0.5) * fingerSpacingMm
+    return { centre, left: centre - fingerWidthMm / 2, width: fingerWidthMm }
+  }).filter((finger) => finger.centre < sectionWidthMm)
+  return { sectionWidthMm, fingers }
+}

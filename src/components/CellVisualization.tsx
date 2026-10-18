@@ -5,6 +5,8 @@ import Resistor from './Resistor'
 import ContactCrossSection from './ContactCrossSection'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
+import { contactSection } from '../panelGeometry'
+import { wavelengthColour } from '../rendering/wavelengthColour'
 
 type CellVisualizationProps = {
   placedPartCount: number
@@ -18,6 +20,7 @@ type CellVisualizationProps = {
 
 export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange }: CellVisualizationProps) {
   const [isTopView, setIsTopView] = useState(false)
+  const { sectionWidthMm } = contactSection(settings.fingerWidth, settings.fingerSpacing)
 
   return (
     <Panel id="visualization" title="Assembly" headerAction={
@@ -27,7 +30,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
       </div>
     }>
       <div className="assembly-area" data-drop-zone>
-        <button type="button" className="assembly-sun" aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>
+        <button type="button" className="assembly-sun" style={{ color: isSunlight ? '#c49327' : wavelengthColour(settings.wavelengthNm) }} aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>
           <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="13" fill="currentColor" /><path d="M32 3V10 M32 54V61 M3 32H10 M54 32H61 M11 11L16 16 M48 48L53 53 M11 53L16 48 M48 16L53 11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
         </button>
         <div className="sun-slider option-control">
@@ -66,16 +69,16 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
                           </div>
                         ) : (
                           <button type="button" className={`cell-layer ${part.id}`}
-                            aria-label={part.id === 'front-contacts' ? 'Front contacts: section along one finger showing two busbars' : `Learn about ${part.name.toLowerCase()}`}
+                            aria-label={part.id === 'front-contacts' ? 'Front contacts: section across fingers between the busbars' : `Learn about ${part.name.toLowerCase()}`}
                             aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}
                             style={part.id === 'rear-contact' ? { height: 8 + settings.rearThickness * 0.6 } : part.id === 'coating' ? { height: 4 + settings.coatingThickness * 0.08 } : undefined}>
-                            {part.id === 'front-contacts' && <ContactCrossSection />}
+                            {part.id === 'front-contacts' && <ContactCrossSection fingerWidth={settings.fingerWidth} fingerSpacing={settings.fingerSpacing} />}
                           </button>
                         )}
                       </div>
                     ))}
                   </div>
-                  <p className="top-view-caption">1 m section along a finger · heights exaggerated</p>
+                  <p className="top-view-caption">Across fingers · {Number(sectionWidthMm.toFixed(1))} mm detail · heights exaggerated</p>
                   <div className="compact-layer-labels" aria-label="Select an assembled layer">
                     {parts.slice(0, placedPartCount).reverse().map((part) => (
                       <button type="button" key={part.id} aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>
