@@ -5,6 +5,9 @@ import type { PartSettings } from '../partOptions'
 import { calculateOptics } from '../physics/optics'
 import { solarPhotonFlux } from '../physics/spectrum'
 import type { ElectricalResults } from '../physics/electrical'
+import type { OperatingMode } from '../physics/electrical'
+import PowerReadout from './PowerReadout'
+import type { ReadingTopic } from './PowerReadout'
 
 type LearningPanelProps = {
   selectedPartId: string | null
@@ -13,15 +16,19 @@ type LearningPanelProps = {
   hasCoating: boolean
   isSunlight: boolean
   electrical: ElectricalResults
+  operatingMode: OperatingMode
+  onOperatingModeChange: (mode: OperatingMode) => void
+  onExplore: (topic: ReadingTopic) => void
 }
 
-export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight, electrical }: LearningPanelProps) {
+export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight, electrical, operatingMode, onOperatingModeChange, onExplore }: LearningPanelProps) {
   const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
   const sunReadings = selectedPartId === 'sun' && !isSunlight
     ? calculateOptics(settings.wavelengthNm, settings.siliconThickness) : null
 
   return (
     <Panel id="learning" title="Inspector">
+      <PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplore} />
       {selectedPart?.description && (
         <div className="part-explanation">
           <h3>{selectedPart.name}</h3>
@@ -32,11 +39,11 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
               <div><dt>Incoming photon rate</dt><dd>{sunReadings.photonFlux.toExponential(2)} /s/m²</dd></div>
             </dl>
           )}
-          {sunReadings && (settings.wavelengthNm < 380 || settings.wavelengthNm > 780) && <p>UV and infrared are invisible; their on-screen colours are symbolic.</p>}
+          {sunReadings && (settings.wavelengthNm < 380 || settings.wavelengthNm > 780) && <p>Our eyes cannot see ultraviolet or infrared light. We give them a colour on screen just so you can tell when you are using them.</p>}
           {selectedPartId === 'sun' && isSunlight && <dl className="sun-readings"><div><dt>Photon energy</dt><dd>Multiple wavelengths</dd></div><div><dt>Incoming photon rate</dt><dd>{solarPhotonFlux.toExponential(2)} /s/m²</dd></div></dl>}
         </div>
       )}
-      {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Select a layer, the sun, or the load to see what it does.</p></div>}
+      {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Click a layer, the sun, or the resistor. We’ll look at what it does and how it helps the cell work.</p></div>}
       {isSunlight ? (
         <section className="optics-readout" aria-label="Sunlight mode">
           <h3>Light & absorption</h3>

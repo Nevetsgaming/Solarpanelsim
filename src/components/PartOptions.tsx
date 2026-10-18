@@ -2,15 +2,17 @@ import { learningTopics } from '../parts'
 import { partOptions } from '../partOptions'
 import type { PartSettings, SettingName } from '../partOptions'
 import { contactGeometry, minimumFingerSpacing, panelGeometry } from '../panelGeometry'
+import type { ElectricalResults } from '../physics/electrical'
 
 type PartOptionsProps = {
   selectedPartId: string | null
   settings: PartSettings
   onSettingChange: (name: SettingName, value: number) => void
   isSunlight: boolean
+  electrical: ElectricalResults
 }
 
-export default function PartOptions({ selectedPartId, settings, onSettingChange, isSunlight }: PartOptionsProps) {
+export default function PartOptions({ selectedPartId, settings, onSettingChange, isSunlight, electrical }: PartOptionsProps) {
   // The emitter and base are regions of the same silicon part.
   const partId = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   const selectedPart = learningTopics.find((part) => part.id === partId)
@@ -33,6 +35,16 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
             aria-valuetext={`${settings[option.key]} ${option.unit}`}
             onChange={(event) => onSettingChange(option.key, option.logarithmic ? Number((10 ** Number(event.target.value)).toPrecision(4)) : Number(event.target.value))}
           />
+          {option.key === 'fingerWidth' && (
+            <div className="contact-feedback">
+              <dl>
+                <div><dt>Light blocked by contacts</dt><dd>{((1 - electrical.unshadedFraction) * 100).toFixed(2)}%</dd></div>
+                <div><dt>Finger resistance</dt><dd>{electrical.fingerResistance.toExponential(2)} Ω</dd></div>
+              </dl>
+              <p>Wider fingers block more sunlight, but give current an easier path. Watch the two readings as you change the width.</p>
+              <p>Can you find a width that produces more power? Check the power box on the right.</p>
+            </div>
+          )}
         </div>
       )) : <p>Select a part to see its options.</p>}
       {partId === 'front-contacts' && (
@@ -40,16 +52,16 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
       )}
       {partId === 'silicon' && <p>Fixed emitter depth: {panelGeometry.emitterThicknessUm} µm.</p>}
       {options && <p>{partId === 'sun'
-        ? isSunlight ? 'Sunlight contains many wavelengths. Switch to Constant wavelength to use the slider beside the sun.' : 'Adjust wavelength beside the sun. Optical power stays fixed.'
+        ? isSunlight ? 'Sunlight mixes many wavelengths together. Choose Constant wavelength if you want to explore one at a time with the slider beside the sun.' : 'Use the slider beside the sun to change the wavelength. We keep the incoming light power the same, so you can compare wavelengths fairly.'
         : partId === 'load'
-          ? 'Adjusting resistance switches to resistor-load operation. The logarithmic slider spans 0.0001–100 Ω; maximum-power mode uses an ideal controller instead.'
+          ? 'Move this slider to choose the resistor connected to your cell. Each equal step changes resistance by a ratio, rather than a fixed amount, so the slider can cover 0.0001–100 Ω. Changing it switches to Resistor load mode.'
         : partId === 'silicon'
-          ? 'Thickness changes single-pass absorption. Drawing not to scale.'
+          ? 'Thicker silicon gives light more material to travel through, so more of it can be absorbed. We count one pass through the silicon, and exaggerate the drawing’s height so you can see the change.'
         : partId === 'coating'
-          ? 'Reflection is a chosen optical loss. Thickness changes the drawing independently; it does not predict reflection.'
+          ? 'Choose how much light bounces away using the reflection slider. Changing the thickness only changes the picture here; it does not calculate a new reflected percentage.'
         : partId === 'front-contacts'
-          ? 'Maximum width: 10 cm (100,000 µm). Spacing increases if needed to keep fingers separate. Top view includes a magnified detail.'
-          : 'Visual adjustments only. Thicknesses exaggerated for visibility.'}</p>}
+          ? 'You can make fingers as wide as 10 cm (100,000 µm) to explore extreme shading. If needed, we increase their spacing so they do not overlap. Switch to Top view to see the layout and a close-up.'
+          : 'This slider changes the picture, not the electrical calculation. We exaggerate layer thicknesses so they are easier to see.'}</p>}
     </section>
   )
 }

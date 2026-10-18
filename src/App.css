@@ -69,11 +69,17 @@
 .option-control label { font-weight: 500; }
 .option-control output { font-family: var(--mono); font-size: .68rem; color: #52677e; font-variant-numeric: tabular-nums; }
 .option-control input { grid-column: 1 / -1; width: 100%; margin: .4rem 0 0; }
+.contact-feedback { grid-column: 1 / -1; margin-top: .7rem; font-size: .7rem; }
+.contact-feedback dl > div { display: flex; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
+.contact-feedback dd { margin: 0; font-family: var(--mono); white-space: nowrap; }
+.contact-feedback p { margin-top: .6rem; color: var(--muted); }
 .assembly-actions { display: flex; gap: .5rem; margin: 0 1.2rem .75rem; }
 .reset-button { flex: 1; min-height: 2.75rem; border: 1px solid var(--border); border-radius: 8px; background: #f8f9fb; font-size: .74rem; cursor: pointer; }
 .reset-button:hover:not(:disabled) { background: #edf1f6; }
 .reset-button:active:not(:disabled) { background: #dde5ef; }
 .power-box { margin: 0 1.2rem 1.2rem; padding: 1rem; border: 1px solid var(--border); border-radius: 10px; background: #f8f9fb; }
+.panel-learning .power-box { margin-top: 1.2rem; }
+.reading-button { margin-top: .25rem; min-height: 2.75rem; font-family: var(--mono); font-size: 1rem; }
 .power-box h3 { color: var(--muted); font-size: .7rem; font-weight: 500; }
 .power-value { margin-top: .25rem; font-family: var(--mono); font-size: 2rem; line-height: 1.3; font-weight: 500; letter-spacing: -.05em; }
 .power-value span { font-size: .85rem; color: var(--muted); }

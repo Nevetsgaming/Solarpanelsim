@@ -9,6 +9,7 @@ import { minimumFingerSpacing } from './panelGeometry'
 import { calculateElectrical } from './physics/electrical'
 import type { OperatingMode } from './physics/electrical'
 import FormulaExplorer from './components/FormulaExplorer'
+import type { ReadingTopic } from './components/PowerReadout'
 import './App.css'
 
 // App arranges the page. Each panel owns its own content.
@@ -18,7 +19,7 @@ function App() {
   const [settings, setSettings] = useState(defaultSettings)
   const [isSunlight, setIsSunlight] = useState(false)
   const [operatingMode, setOperatingMode] = useState<OperatingMode>('mpp')
-  const [isFormulaOpen, setIsFormulaOpen] = useState(false)
+  const [formulaTopic, setFormulaTopic] = useState<ReadingTopic | null>(null)
   const electrical = useMemo(() => calculateElectrical(settings, isSunlight, placedPartCount === parts.length), [settings, isSunlight, placedPartCount])
 
   function changeSetting(name: SettingName, value: number) {
@@ -59,12 +60,12 @@ function App() {
       </header>
       <main>
         <div className="workspace">
-          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} onUndo={undoLayer} electrical={electrical} operatingMode={operatingMode} onOperatingModeChange={setOperatingMode} onExplorePower={() => setIsFormulaOpen(true)} />
+          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} onUndo={undoLayer} electrical={electrical} />
           <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} />
-          <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical} />
+          <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical} operatingMode={operatingMode} onOperatingModeChange={setOperatingMode} onExplore={setFormulaTopic} />
         </div>
       </main>
-      {isFormulaOpen && <FormulaExplorer results={electrical} operating={operatingMode === 'mpp' ? electrical.mpp : electrical.load} settings={settings} isSunlight={isSunlight} onClose={() => setIsFormulaOpen(false)} />}
+      {formulaTopic && <FormulaExplorer topic={formulaTopic} mode={operatingMode} results={electrical} operating={operatingMode === 'mpp' ? electrical.mpp : electrical.load} settings={settings} isSunlight={isSunlight} onClose={() => setFormulaTopic(null)} />}
       
     </div>
   )

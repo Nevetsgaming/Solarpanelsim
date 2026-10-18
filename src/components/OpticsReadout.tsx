@@ -21,9 +21,9 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon, r
         <div><dt>Silicon bandgap</dt><dd>{siliconBandgapEv} eV</dd></div>
       </dl>
       <p>{optics.canGeneratePairs
-        ? 'Enough energy to generate an electron–hole pair if absorbed.'
-        : 'Below bandgap: no electron–hole generation in this model.'}</p>
-      <p>Threshold ≈ {Math.round(bandgapWavelengthNm)} nm. Optical input stays at {incidentPowerPerArea} W/m² as wavelength changes.</p>
+        ? 'Each photon has enough energy to free an electron if the silicon absorbs it. That leaves a hole behind; together they can contribute to current.'
+        : 'These photons do not have enough energy to free an electron across silicon’s bandgap. They cannot generate current in this model, even if some light is absorbed.'}</p>
+      <p>Silicon’s longest usable wavelength is about {Math.round(bandgapWavelengthNm)} nm. We keep incoming light power at {incidentPowerPerArea} W/m² as you change wavelength, so you are comparing the same amount of light energy.</p>
 
       {hasSilicon ? (
         <>
@@ -35,7 +35,7 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon, r
           </dl>
           <meter min="0" max="1" value={optics.absorbedFraction} aria-label="Fraction absorbed in silicon" />
         </>
-      ) : <p>Place silicon to measure absorption.</p>}
+      ) : <p>Add the silicon layer and we can see how much of this light it absorbs.</p>}
 
     </section>
   )
