@@ -23,6 +23,15 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
   const siliconAbsorption = partId === 'silicon'
     ? lightBudget(settings.wavelengthNm, settings.siliconThickness, 0, 1, isSunlight, true).useful : 0
 
+  const helpText: Partial<Record<SettingName, string>> = {
+    fingerWidth: 'Wider fingers reduce resistance but block more light. Use this logarithmic slider or type an exact width below; maximum 25 cm.',
+    fingerSpacing: 'Distance between finger centres. Closer fingers shade more silicon but shorten the path current travels through silicon. Spacing stays independent of width.',
+    siliconThickness: 'Thicker silicon absorbs more usable photons. Try the thin end or 1065 nm to see a stronger effect. The scale is logarithmic; this model adds no thickness penalty.',
+    reflectedPercent: 'The fraction of light bouncing away. Lower reflection lets more light enter. It is the same for all wavelengths in this model.',
+    coatingThickness: 'Appearance only: thickness changes the drawing, not reflection or power.',
+    rearThickness: 'Appearance only: thickness changes the drawing, not resistance or power.',
+  }
+
   if (partId === 'sun') return null
 
   return (
@@ -48,12 +57,21 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
             }}
           />
           {option.key === 'siliconThickness' && <div className="contact-feedback">
-            <dl><div><dt>Useful photons absorbed*</dt><dd>{(siliconAbsorption * 100).toFixed(1)}%</dd></div></dl>
-            <p>*Ignoring reflection and metal shading. Only counts absorbed photons with enough energy to generate charge.</p>
-            <p>Try the thin end to see power drop. Near 1065 nm, thickness matters even for thicker layers. The slider uses a logarithmic scale.</p>
+            <dl><div><dt>Useful photons absorbed</dt><dd>{(siliconAbsorption * 100).toFixed(1)}%</dd></div></dl>
+
           </div>}
           {option.key === 'fingerWidth' && (
             <div className="contact-feedback">
+              <dl>
+                <div><dt>Light blocked by contacts</dt><dd>{((1 - electrical.unshadedFraction) * 100).toFixed(2)}%</dd></div>
+              </dl>
+
+            </div>
+          )}
+          <details className="control-help">
+            <summary aria-label={`Help with ${option.label.toLowerCase()}`}>?</summary>
+            <p>{helpText[option.key]}</p>
+            {option.key === 'fingerWidth' && <>
               <label htmlFor="finger-width-exact">Exact width (µm)</label>
               <input key={settings.fingerWidth} id="finger-width-exact" type="number" min={option.min} max={option.max} step="1" defaultValue={settings.fingerWidth}
                 onKeyDown={(event) => { if (event.key === 'Enter') event.currentTarget.blur() }}
@@ -62,29 +80,13 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
                   if (Number.isFinite(value) && value >= option.min && value <= option.max) onSettingChange('fingerWidth', Math.round(value))
                   else event.currentTarget.value = String(settings.fingerWidth)
                 }} />
-              <dl>
-                <div><dt>Light blocked by contacts</dt><dd>{((1 - electrical.unshadedFraction) * 100).toFixed(2)}%</dd></div>
-                <div><dt>Finger resistance</dt><dd>{electrical.fingerResistance.toExponential(2)} Ω</dd></div>
-              </dl>
-              <p>Wider fingers block more sunlight, but give current an easier path. Watch the two readings as you change the width.</p>
-              <p>The slider uses a logarithmic scale for fine control. You can also type an exact width above.</p>
-            </div>
-          )}
+              <p>Finger resistance: {electrical.fingerResistance.toExponential(2)} Ω. {contactGeometry(settings.fingerWidth, settings.fingerSpacing).fingerCount} fingers across 1 m.</p>
+            </>}
+            {option.key === 'siliconThickness' && <p>Absorption reading ignores reflection and shading. Emitter depth: {panelGeometry.emitterThicknessUm} µm. Drawing not to scale.</p>}
+          </details>
         </div>
-      )) : <p>Select a part to see its options.</p>}
-      {partId === 'front-contacts' && (
-        <p>{contactGeometry(settings.fingerWidth, settings.fingerSpacing).fingerCount} fingers across 1 m. Fixed finger height: {panelGeometry.fingerHeightUm} µm. Two {panelGeometry.busbarWidthMm} mm busbars.</p>
-      )}
-      {partId === 'silicon' && <p>Fixed emitter depth: {panelGeometry.emitterThicknessUm} µm.</p>}
-      {options && <p>{partId === 'load'
-          ? 'Choose the resistor connected to your cell. The logarithmic slider covers small and large loads; moving it selects Resistor load mode.'
-        : partId === 'silicon'
-          ? 'Thicker silicon absorbs more light, with diminishing gains. This model does not add a penalty for thickness, so there is no thickness optimum to find. Drawing not to scale.'
-        : partId === 'coating'
-          ? 'Choose how much light bounces away using the reflection slider. Changing the thickness only changes the picture here; it does not calculate a new reflected percentage.'
-        : partId === 'front-contacts'
-          ? 'Finger width goes up to 25 cm (250,000 µm). Spacing stays where you set it. When fingers meet or overlap, metal covers the whole surface and no light can generate power. Switch to Top view to see the coverage.'
-          : 'This slider changes the picture, not the electrical calculation. We exaggerate layer thicknesses so they are easier to see.'}</p>}
+      )) : <p>Select a part to adjust it.</p>}
+
     </section>
   )
 }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Panel from './Panel'
 import TopView from './TopView'
 import CircuitView from './CircuitView'
-import Resistor from './Resistor'
+import LightFlow from './LightFlow'
 import ContactCrossSection from './ContactCrossSection'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
@@ -10,7 +10,7 @@ import { contactSection } from '../panelGeometry'
 import { wavelengthColour } from '../rendering/wavelengthColour'
 import PowerReadout from './PowerReadout'
 import type { ReadingTopic } from './PowerReadout'
-import type { ElectricalResults, OperatingMode } from '../physics/electrical'
+import type { ElectricalResults } from '../physics/electrical'
 
 type CellVisualizationProps = {
   placedPartCount: number
@@ -21,25 +21,25 @@ type CellVisualizationProps = {
   isSunlight: boolean
   onLightModeChange: (isSunlight: boolean) => void
   electrical: ElectricalResults
-  operatingMode: OperatingMode
-  onOperatingModeChange: (mode: OperatingMode) => void
   onExplore: (topic: ReadingTopic) => void
   challengeActive: boolean
+  learnMode?: boolean
 }
 
-export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange, electrical, operatingMode, onOperatingModeChange, onExplore, challengeActive }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange, electrical, onExplore, challengeActive, learnMode = true }: CellVisualizationProps) {
   const [view, setView] = useState<'cross-section' | 'top' | 'circuit'>('cross-section')
+  const activeView = !learnMode && view === 'circuit' ? 'cross-section' : view
   const { sectionWidthMm } = contactSection(settings.fingerWidth, settings.fingerSpacing)
 
   return (
     <Panel id="visualization" title="Assembly" headerAction={
       <div className="view-controls" role="group" aria-label="Assembly view">
-        <button type="button" aria-pressed={view === 'cross-section'} onClick={() => setView('cross-section')}>Cross-section</button>
-        <button type="button" aria-pressed={view === 'top'} onClick={() => setView('top')}>Top view</button>
-        <button type="button" aria-pressed={view === 'circuit'} onClick={() => setView('circuit')}>Circuit view</button>
+        <button type="button" aria-pressed={activeView === 'cross-section'} onClick={() => setView('cross-section')}>Cross-section</button>
+        <button type="button" aria-pressed={activeView === 'top'} onClick={() => setView('top')}>Top view</button>
+        {learnMode && <button type="button" aria-pressed={activeView === 'circuit'} onClick={() => setView('circuit')}>Circuit view</button>}
       </div>
     }>
-      <div className="canvas-readings"><PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplore} lockedMode={challengeActive} /></div>
+      <div className="canvas-readings"><PowerReadout results={electrical} onExplore={onExplore} challengeActive={challengeActive} /></div>
       <div className="assembly-area" data-drop-zone>
         <button type="button" className="assembly-sun" style={{ color: isSunlight ? '#c49327' : wavelengthColour(settings.wavelengthNm) }} aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>
           <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="13" fill="currentColor" /><path d="M32 3V10 M32 54V61 M3 32H10 M54 32H61 M11 11L16 16 M48 48L53 53 M11 53L16 48 M48 16L53 11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
@@ -56,7 +56,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
         </div>
 
         <div className="assembly-status">
-          {view === 'circuit' ? <CircuitView results={electrical} settings={settings} mode={operatingMode} /> : placedPartCount === 0 ? (
+          {activeView === 'circuit' ? <CircuitView results={electrical} /> : placedPartCount === 0 ? (
             <div className="empty-assembly">
               <svg viewBox="0 0 80 64" aria-hidden="true"><path d="M8 22L40 6L72 22L40 38Z M8 34L40 50L72 34 M8 46L40 62L72 46" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /></svg>
               <h3>Start with the rear contact</h3>
@@ -65,7 +65,8 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
           ) : (
             <>
               <p className="assembly-hint" role="status">{parts[placedPartCount] ? `Next: ${parts[placedPartCount].name}` : 'Cell assembled'}</p>
-              {view === 'top' ? (
+              <LightFlow settings={settings} isSunlight={isSunlight} placedPartCount={placedPartCount} unshadedFraction={electrical.unshadedFraction} />
+              {activeView === 'top' ? (
                 <TopView placedPartCount={placedPartCount} settings={settings} selectedPartId={selectedPartId} onSelectPart={onSelectPart} />
               ) : (
                 <>
@@ -99,7 +100,6 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
               )}
             </>
           )}
-          {view !== 'circuit' && <Resistor resistance={settings.loadResistance} selected={selectedPartId === 'load'} onSelect={() => onSelectPart('load')} />}
         </div>
         <span className="canvas-caption">SILICON / 1 m² ACTIVE AREA</span>
       </div>

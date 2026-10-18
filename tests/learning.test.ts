@@ -94,3 +94,10 @@ test('the thickness slider reaches thin layers with a noticeable physical power 
   const thick = lightBudget(1065, 1000, 0, 1, false, true)
   assert.ok(thin.useful < 0.01 && thick.useful > 0.6)
 })
+
+test('displayed maximum-power output is independent of the internal resistor reference', () => {
+  const small = calculateElectrical({ ...defaultSettings, loadResistance: 0.0001 }, true, true)
+  const large = calculateElectrical({ ...defaultSettings, loadResistance: 100 }, true, true)
+  assert.deepEqual(small.mpp, large.mpp)
+  assert.equal(partOptions.load, undefined)
+})

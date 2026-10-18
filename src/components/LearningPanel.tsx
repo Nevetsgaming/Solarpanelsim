@@ -24,7 +24,7 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
     ? calculateOptics(settings.wavelengthNm, settings.siliconThickness) : null
 
   return (
-    <Panel id="learning" title="Inspector">
+    <Panel id="learning" title="Learn">
       {selectedPart?.description && (
         <div className="part-explanation">
           <h3>{selectedPart.name}</h3>
@@ -46,8 +46,10 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
           {selectedPartId === 'sun' && isSunlight && <dl className="sun-readings"><div><dt>Photon energy</dt><dd>Multiple wavelengths</dd></div><div><dt>Incoming photon rate</dt><dd>{solarPhotonFlux.toExponential(2)} /s/m²</dd></div></dl>}
         </div>
       )}
-      {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Click a layer, the sun, or the resistor. We’ll look at what it does and how it helps the cell work.</p></div>}
-      <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} reflectedPercent={hasCoating ? settings.reflectedPercent : 0} isSunlight={isSunlight} unshadedFraction={electrical.assembled ? electrical.unshadedFraction : 1} />
+      {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Click a layer or the sun. We’ll look at what it does and how it helps the cell work.</p></div>}
+      <details className="learn-section"><summary>Where the light goes</summary>
+        <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} reflectedPercent={hasCoating ? settings.reflectedPercent : 0} isSunlight={isSunlight} unshadedFraction={electrical.assembled ? electrical.unshadedFraction : 1} />
+      </details>
       {experiment}
       {curve}
     </Panel>

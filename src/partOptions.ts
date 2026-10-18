@@ -25,9 +25,6 @@ type PartOption = {
 
 // Geometry drives shading and resistance. Coating/rear thickness remain visual only.
 export const partOptions: Record<string, PartOption[]> = {
-  load: [
-    { key: 'loadResistance', label: 'Load resistance', unit: 'Ω', min: 0.0001, max: 100, step: 0.0001, logarithmic: true },
-  ],
   sun: [],
   'rear-contact': [
     { key: 'rearThickness', label: 'Metal thickness', unit: 'µm', min: 5, max: 50, step: 1, appearanceOnly: true },

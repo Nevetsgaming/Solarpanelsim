@@ -6,7 +6,6 @@ import { parts } from './parts'
 import { defaultSettings } from './partOptions'
 import type { SettingName } from './partOptions'
 import { calculateElectrical } from './physics/electrical'
-import type { OperatingMode } from './physics/electrical'
 import FormulaExplorer from './components/FormulaExplorer'
 import type { ReadingTopic } from './components/PowerReadout'
 import type { DesignSnapshot } from './experiments'
@@ -20,20 +19,19 @@ function App() {
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null)
   const [settings, setSettings] = useState(defaultSettings)
   const [isSunlight, setIsSunlight] = useState(true)
-  const [operatingMode, setOperatingMode] = useState<OperatingMode>('mpp')
   const [formulaTopic, setFormulaTopic] = useState<ReadingTopic | null>(null)
+  const [workspaceMode, setWorkspaceMode] = useState<'build' | 'learn'>('build')
   const [previous, setPrevious] = useState<DesignSnapshot | null>(null)
   const [saved, setSaved] = useState<DesignSnapshot | null>(null)
   const [challengeBaseline, setChallengeBaseline] = useState<number | null>(null)
   const challengeActive = challengeBaseline !== null
   const electrical = useMemo(() => calculateElectrical(settings, isSunlight, placedPartCount === parts.length), [settings, isSunlight, placedPartCount])
-  const current: DesignSnapshot = { settings: { ...settings }, isSunlight, mode: operatingMode, results: electrical }
+  const current: DesignSnapshot = { settings: { ...settings }, isSunlight, mode: 'mpp', results: electrical }
 
   function changeSetting(name: SettingName, value: number) {
     if (challengeActive && name !== 'fingerWidth') return
     if (settings[name] === value) return
     setPrevious(current)
-    if (name === 'loadResistance') setOperatingMode('load')
     setSettings((current) => ({ ...current, [name]: value }))
   }
 
@@ -44,7 +42,6 @@ function App() {
     setSelectedPartId(null)
     setSettings(defaultSettings)
     setIsSunlight(true)
-    setOperatingMode('mpp')
   }
 
   function undoLayer() {
@@ -68,17 +65,10 @@ function App() {
     setIsSunlight(value)
   }
 
-  function changeOperatingMode(mode: OperatingMode) {
-    if (challengeActive || mode === operatingMode) return
-    setPrevious(current)
-    setOperatingMode(mode)
-  }
-
   function startChallenge() {
     setSettings({ ...defaultSettings })
     setPlacedPartCount(parts.length)
     setIsSunlight(true)
-    setOperatingMode('mpp')
     setSelectedPartId('front-contacts')
     setPrevious(null)
     setChallengeBaseline(calculateElectrical(defaultSettings, true, true).mpp.power)
@@ -89,7 +79,6 @@ function App() {
     setPrevious(current)
     setSettings({ ...saved.settings })
     setIsSunlight(saved.isSunlight)
-    setOperatingMode(saved.mode)
     setPlacedPartCount(parts.length)
   }
 
@@ -97,18 +86,22 @@ function App() {
     <div className="app-shell">
       <header className="app-header">
         <h1 className="brand"><span className="brand-mark" aria-hidden="true">☀</span>Solar Cell Lab</h1>
+        <nav className="workspace-modes" aria-label="Workspace mode">
+          <button type="button" aria-pressed={workspaceMode === 'build'} onClick={() => setWorkspaceMode('build')}>Build</button>
+          <button type="button" aria-pressed={workspaceMode === 'learn'} onClick={() => setWorkspaceMode('learn')}>Learn</button>
+        </nav>
         <span className="project-meta">Silicon <span aria-hidden="true">/</span> 1 m × 1 m</span>
       </header>
       <main>
-        <div className="workspace">
-          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} onUndo={undoLayer} electrical={electrical} challengeActive={challengeActive} />
-          <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={changeLightMode} electrical={electrical} operatingMode={operatingMode} onOperatingModeChange={changeOperatingMode} onExplore={setFormulaTopic} challengeActive={challengeActive} />
-          <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical}
+        <div className="workspace" data-mode={workspaceMode}>
+          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} onUndo={undoLayer} electrical={electrical} challengeActive={challengeActive} />
+          <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={changeLightMode} electrical={electrical} onExplore={(topic) => { setWorkspaceMode('learn'); setFormulaTopic(topic) }} challengeActive={challengeActive} learnMode={workspaceMode === 'learn'} />
+          {workspaceMode === 'learn' && <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical}
             experiment={<ExperimentPanel current={current} previous={previous} saved={saved} challengeBaseline={challengeBaseline} onSave={() => { if (electrical.assembled && !challengeActive) setSaved(current) }} onRestore={restoreSaved} onChallenge={startChallenge} onEndChallenge={() => setChallengeBaseline(null)} />}
-            curve={<IVCurve results={electrical} mode={operatingMode} />} />
+            curve={<IVCurve results={electrical} mode="mpp" />} />}
         </div>
       </main>
-      {formulaTopic && <FormulaExplorer topic={formulaTopic} mode={operatingMode} results={electrical} operating={operatingMode === 'mpp' ? electrical.mpp : electrical.load} settings={settings} isSunlight={isSunlight} onClose={() => setFormulaTopic(null)} />}
+      {formulaTopic && <FormulaExplorer topic={formulaTopic} mode="mpp" results={electrical} operating={electrical.mpp} settings={settings} isSunlight={isSunlight} onClose={() => setFormulaTopic(null)} />}
       
     </div>
   )

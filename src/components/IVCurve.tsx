@@ -19,7 +19,7 @@ export default function IVCurve({ results, mode }: { results: ElectricalResults;
   return (
     <details className="iv-curve">
       <summary>Why do current and voltage change together?</summary>
-      <p>The curve shows the combinations your cell can supply. The dot marks the selected operating point.</p>
+      <p>The curve shows the combinations your cell can supply. The controller chooses the point with the most power.</p>
       {points.length ? <svg viewBox="0 0 330 215" role="img" aria-label="Current–voltage curve with the selected operating point and maximum-power point">
         <path d="M48 30V168H310" fill="none" stroke="currentColor" />
         <polyline points={points.join(' ')} fill="none" stroke="#2468c9" strokeWidth="2" />
@@ -27,7 +27,7 @@ export default function IVCurve({ results, mode }: { results: ElectricalResults;
         <circle cx={x(operating.voltage)} cy={y(operating.current)} r="4" fill="#2468c9" />
         <g fill="currentColor" fontSize="11"><text x="48" y="185">0</text><text x="235" y="185">{maxVoltage.toFixed(2)} V</text><text x="58" y="20">Current (A)</text><text x="215" y="205">Voltage (V)</text><text x="3" y="42">{maxCurrent.toFixed(0)}</text></g>
       </svg> : <p>{results.assembled ? 'There is no light-generated current to plot. Check shading, reflection and wavelength.' : 'Finish the assembly to see your curve.'}</p>}
-      <p>Blue dot: selected point. Green ring: maximum power. Voltage × current is the power at either point.</p>
+      <p>The dot and ring mark maximum power: the point where voltage × current is largest.</p>
     </details>
   )
 }

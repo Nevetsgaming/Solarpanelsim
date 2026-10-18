@@ -27,11 +27,6 @@ export const parts: LearningTopic[] = [
 export const learningTopics: LearningTopic[] = [
   ...parts,
   {
-    id: 'load', name: 'Load resistance',
-    description: 'Your load sets the cell’s current and voltage together. The right balance delivers more power.',
-    detail: 'In Resistor load mode, the cell and resistor must share the same current and voltage. Maximum power mode uses an ideal controller to choose the point where voltage times current is largest.',
-  },
-  {
     id: 'sun', name: 'Sunlight',
     description: 'Light supplies the energy. An absorbed photon needs enough energy to create an electron–hole pair.',
     detail: 'We hold incoming light power fixed. Longer-wavelength photons each carry less energy, so there are more of them for the same power—but photons beyond about 1107 nm cannot generate charge here.',

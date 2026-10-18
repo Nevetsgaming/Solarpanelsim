@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import type { ElectricalResults, OperatingMode } from '../physics/electrical'
+import type { ElectricalResults } from '../physics/electrical'
 import { device, saturationCurrent, thermalVoltage } from '../physics/electrical'
-import type { PartSettings } from '../partOptions'
 import circuitImage from '../assets/diodesolar.webp'
 
 type CircuitViewProps = {
   results: ElectricalResults
-  settings: PartSettings
-  mode: OperatingMode
 }
 
 type ComponentId = 'light' | 'diode' | 'shunt' | 'series' | 'junction' | 'output'
@@ -22,9 +19,9 @@ const diodeExpression = <>I<sub>0</sub> [e<sup><span className="formula-fraction
 const leakageExpression = <span className="formula-fraction"><span>{junction}</span><span>{shuntResistance}</span></span>
 const junctionEquation = <>{junction} = {outputVoltage} + {outputCurrent} {seriesResistance}</>
 
-export default function CircuitView({ results, settings, mode }: CircuitViewProps) {
+export default function CircuitView({ results }: CircuitViewProps) {
   const [selected, setSelected] = useState<ComponentId>('light')
-  const point = mode === 'mpp' ? results.mpp : results.load
+  const point = results.mpp
   const junctionVoltage = point.voltage + point.current * results.seriesResistance
   const diodeLoss = saturationCurrent * Math.expm1(junctionVoltage / (device.idealityFactor * thermalVoltage))
   const components = {
@@ -72,7 +69,7 @@ export default function CircuitView({ results, settings, mode }: CircuitViewProp
       name: 'What reaches your device · Iout and Vout',
       label: <>What reaches your device · {outputCurrent} and {outputVoltage}</>,
       explanation: 'Connect your device between the two terminals on the right. It receives the light-generated current minus the diode and leakage currents. Output voltage times output current gives its power.',
-      formula: <>{mode === 'load' && <>{outputVoltage} = {outputCurrent} R<sub>load</sub>;　</>}P = {outputVoltage} {outputCurrent}</>,
+      formula: <>P = {outputVoltage} {outputCurrent}</>,
       value: point.current.toFixed(3) + ' A · ' + point.voltage.toFixed(4) + ' V',
       box: { left: '85%', top: '0%', width: '15%', height: '100%' },
     },
@@ -107,7 +104,7 @@ export default function CircuitView({ results, settings, mode }: CircuitViewProp
           <p className="circuit-component-formula">{active.formula}</p>
           <p>{results.assembled ? active.value : 'Assemble the cell first to see a live reading.'}</p>
         </section>
-        <p>{mode === 'load' ? `Your external load is ${settings.loadResistance} Ω. Change it in Parts to move the operating point.` : 'Maximum-power mode uses an ideal controller at the terminals. Choose Resistor load to connect your adjustable resistor instead.'}</p>
+        <p>An ideal controller automatically chooses the current and voltage that deliver the most power.</p>
         {!results.assembled && <p>Add all four layers to turn on electrical output.</p>}
         <div className="circuit-current-formula">
           <h3>The current balance</h3>

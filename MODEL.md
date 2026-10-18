@@ -5,6 +5,23 @@ Run their checks with `npm test` (Node.js 24 supports these TypeScript files dir
 
 ## Learning and comparison controls
 
+The player always sees maximum power and its matching current and voltage. An
+ideal controller selects the maximum-power operating point automatically. There
+is no adjustable resistor or resistor-load mode in the UI. The independent
+resistor-load solver remains in the physics module for numerical checks only.
+
+The workspace starts in Build mode: only Parts and the canvas are shown. Learn
+mode reveals the learning column and circuit-view option; clicking an electrical
+reading also switches to Learn. Switching modes preserves the design.
+Slider guidance is collapsed behind per-control question marks. Experiments
+start collapsed, with separate accordion sections for challenge, last-change
+feedback and saved comparison. An active challenge opens its own section.
+The visual light indicator uses the same photon budget as the detailed readout:
+the bar has exact fractions, while 24 rays are an illustrative sample, not a
+time-resolved or spatial ray-tracing simulation. It does not represent energy
+efficiency. Motion is limited to a short bar-width transition, disabled when
+reduced motion is requested.
+
 Finger width uses a logarithmic 20–250,000 µm slider, with an exact numeric input.
 Silicon thickness uses a logarithmic 1–1,000 µm range, rounded to 0.1 µm, with
 the default still at 180 µm. Thin layers expose a noticeable absorption/power
@@ -135,11 +152,10 @@ current crowding are omitted. Parameter sources/derivations:
 
 The solver parameterizes the curve by junction voltage U = V + I*Rs. It brackets
 Voc and the short-circuit point, then searches for the maximum of V*I. Maximum-power
-mode displays Vmp, Imp and Pmax together. Resistor mode solves V = I*Rload on the
-same curve and displays load voltage/current/power together. Moving the logarithmic
-load slider selects resistor mode; switching back selects the ideal MPP controller.
-Load range: 0.0001–100 Ω, default 0.002 Ω, appropriate to the low-voltage 1 m²
-single-junction teaching geometry. This is not a series-connected commercial module.
+output displays Vmp, Imp and Pmax together. The internal resistor solver also
+solves V = I*Rload on the same curve for tests, but is not exposed to the player.
+The internal load-solver reference is 0.002 Ω; it does not affect displayed maximum
+power. This is not a series-connected commercial module.
 All four layers are required before electrical output is enabled.
 
 At default settings in sunlight mode: Iph ≈ 336.974 A, Rs = 0.0004790625 Ω,

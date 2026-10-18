@@ -1,16 +1,14 @@
-import type { ElectricalResults, OperatingMode } from '../physics/electrical'
+import type { ElectricalResults } from '../physics/electrical'
 export type ReadingTopic = 'power' | 'current' | 'voltage'
 
 type PowerReadoutProps = {
   results: ElectricalResults
-  mode: OperatingMode
-  onModeChange: (mode: OperatingMode) => void
   onExplore: (topic: ReadingTopic) => void
-  lockedMode?: boolean
+  challengeActive?: boolean
 }
 
-export default function PowerReadout({ results, mode, onModeChange, onExplore, lockedMode = false }: PowerReadoutProps) {
-  const operating = mode === 'mpp' ? results.mpp : results.load
+export default function PowerReadout({ results, onExplore, challengeActive = false }: PowerReadoutProps) {
+  const operating = results.mpp
   function reading(value: number) {
     if (!results.assembled) return '—'
     if (value > 0 && value < 0.01) return value.toExponential(2)
@@ -19,20 +17,16 @@ export default function PowerReadout({ results, mode, onModeChange, onExplore, l
 
   return (
     <div className="power-box">
-      <div className="electrical-mode" role="group" aria-label="Electrical operating mode">
-        <button type="button" disabled={lockedMode} aria-pressed={mode === 'mpp'} onClick={() => onModeChange('mpp')}>Maximum power</button>
-        <button type="button" disabled={lockedMode} aria-pressed={mode === 'load'} onClick={() => onModeChange('load')}>Resistor load</button>
-      </div>
-      {lockedMode && <p className="small-note">Challenge: only finger width can change.</p>}
-      <h3>{mode === 'mpp' ? <>Maximum power (P<sub>max</sub>)</> : 'Power delivered to load'}</h3>
+      {challengeActive && <p className="small-note">Challenge: only finger width can change.</p>}
+      <h3 title="An ideal controller automatically selects the current and voltage that give the most power.">Maximum power (P<sub>max</sub>)</h3>
       <button type="button" className="power-value power-button" onClick={() => onExplore('power')} aria-haspopup="dialog" aria-label={`Explore power calculation: ${reading(operating.power)} watts`}>
         {reading(operating.power)} <span>W</span>
       </button>
       <div className="electrical-readings">
-        <div><h3>{mode === 'mpp' ? <>Current (I<sub>mp</sub>)</> : 'Load current'}</h3><button type="button" className="reading-button power-button" onClick={() => onExplore('current')} aria-haspopup="dialog" aria-label={`Explore current calculation: ${reading(operating.current)} amperes`}>{reading(operating.current)} A</button></div>
-        <div><h3>{mode === 'mpp' ? <>Voltage (V<sub>mp</sub>)</> : 'Load voltage'}</h3><button type="button" className="reading-button power-button" onClick={() => onExplore('voltage')} aria-haspopup="dialog" aria-label={`Explore voltage calculation: ${reading(operating.voltage)} volts`}>{reading(operating.voltage)} V</button></div>
+        <div><h3>Current (I<sub>mp</sub>)</h3><button type="button" className="reading-button power-button" onClick={() => onExplore('current')} aria-haspopup="dialog" aria-label={`Explore current calculation: ${reading(operating.current)} amperes`}>{reading(operating.current)} A</button></div>
+        <div><h3>Voltage (V<sub>mp</sub>)</h3><button type="button" className="reading-button power-button" onClick={() => onExplore('voltage')} aria-haspopup="dialog" aria-label={`Explore voltage calculation: ${reading(operating.voltage)} volts`}>{reading(operating.voltage)} V</button></div>
       </div>
-      <p className="power-help">{results.assembled ? 'Click any reading and we’ll walk through where it comes from.' : 'Add all four layers first, then we can see how much electricity your cell produces.'}</p>
+      <p className="power-help">{results.assembled ? 'Click a reading to learn more.' : 'Add all four layers to start.'}</p>
     </div>
   )
 }
