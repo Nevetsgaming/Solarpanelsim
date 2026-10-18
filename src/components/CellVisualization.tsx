@@ -3,6 +3,7 @@ import Panel from './Panel'
 import TopView from './TopView'
 import CircuitView from './CircuitView'
 import LightFlow from './LightFlow'
+import BandgapInfo from './BandgapInfo'
 import ContactCrossSection from './ContactCrossSection'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
@@ -41,6 +42,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
     }>
       <div className="canvas-readings"><PowerReadout results={electrical} onExplore={onExplore} challengeActive={challengeActive} /></div>
       <div className="assembly-area" data-drop-zone>
+        <BandgapInfo />
         <button type="button" className="assembly-sun" style={{ color: isSunlight ? '#c49327' : wavelengthColour(settings.wavelengthNm) }} aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>
           <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="13" fill="currentColor" /><path d="M32 3V10 M32 54V61 M3 32H10 M54 32H61 M11 11L16 16 M48 48L53 53 M11 53L16 48 M48 16L53 11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
         </button>

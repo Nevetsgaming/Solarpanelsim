@@ -13,7 +13,7 @@ export default function WavelengthGuide({ wavelengthNm, isSunlight }: { waveleng
   return (
     <details className="wavelength-guide">
       <summary>Wavelength guide</summary>
-      <p>{isSunlight ? 'Sunlight mixes all these ranges. “More photons per watt” compares equal light power; the actual amount in each range comes from the solar spectrum.' : 'The slider keeps light power fixed. Longer wavelengths mean more photons, but less energy in each one. Your selected range is highlighted.'}</p>
+      {isSunlight && <p>Sunlight mixes all these ranges. “More photons per watt” compares equal light power; the actual amount in each range comes from the solar spectrum.</p>}
       <dl>{ranges.map((range, index) => <div key={range.name} data-current={!isSunlight && selectedRange === index ? 'true' : undefined}>
         <dt>{range.name}{!isSunlight && selectedRange === index && <span className="range-selected"> · selected</span>}</dt>
         <dd>{range.text}</dd>

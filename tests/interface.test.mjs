@@ -69,6 +69,7 @@ test('maximum-power UI renders matching current/voltage without load controls, w
       assert.equal((guide.match(/data-current="true"/g) ?? []).length, 1)
       assert.ok(guide.includes('Wavelength guide') && guide.includes('more photons per watt'))
       assert.ok(guide.includes('More photons or thicker silicon cannot fix'))
+      assert.ok(!guide.includes('The slider keeps light power fixed'))
     }
     const sunlightGuide = renderToStaticMarkup(createElement(WavelengthGuide, { wavelengthNm: 550, isSunlight: true }))
     assert.ok(!sunlightGuide.includes('data-current="true"'))
@@ -127,6 +128,9 @@ test('maximum-power UI renders matching current/voltage without load controls, w
     assert.ok(!app.includes('panel panel-learning'), 'Build mode hides the learning column')
     assert.ok(!app.includes('Circuit view'), 'Circuit view is requested through Learn mode')
     assert.ok(app.includes('Sunlight spectrum'), 'the app starts with the terrestrial sunlight spectrum')
+    assert.ok(app.includes('Electron bandgap') && app.includes('What is the bandgap?'))
+    assert.ok(app.includes('Conduction band') && app.includes('Valence band'))
+    assert.ok(app.includes('Close bandgap explanation'))
     assert.ok(!app.includes('Load resistance') && !app.includes('load-resistor') && !app.includes('Resistor load'))
     const { default: CircuitView } = await server.ssrLoadModule('/src/components/CircuitView.tsx')
     const circuit = renderToStaticMarkup(createElement(CircuitView, { results }))
