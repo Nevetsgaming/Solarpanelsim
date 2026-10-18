@@ -35,6 +35,12 @@
 .assembly-status { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
 .assembly-hint { margin-bottom: 24px; }
 .assembly-sun { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); color: #a66b00; font-size: 72px; line-height: 1; background: none; border: none; padding: 0; cursor: pointer; }
+.sunlight-waves { display: block; width: min(100%, 160px); height: 64px; margin: 0 auto 12px; overflow: visible; transition: color 250ms ease; }
+.sunlight-waves path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 9 7; animation: sunlight-travel 1s linear infinite; }
+.sunlight-waves path:nth-child(2) { animation-delay: -330ms; }
+.sunlight-waves path:nth-child(3) { animation-delay: -660ms; }
+@keyframes sunlight-travel { to { stroke-dashoffset: -32; } }
+@media (prefers-reduced-motion: reduce) { .sunlight-waves path { animation: none; } }
 /* Reverse the visual order so each new layer sits on top of the previous one. */
 .cell-stack { display: flex; flex-direction: column-reverse; width: 100%; max-width: 260px; margin: auto; }
 .layer-row { position: relative; }
@@ -45,6 +51,9 @@
 .part-explanation h3 { font-size: 14px; margin-bottom: 12px; }
 .part-explanation p { font-size: 13px; }
 .cell-layer { display: block; width: 100%; padding: 0; border: 1px solid #000; cursor: pointer; }
+.layer-slot { box-sizing: border-box; width: 100%; border: 1px dashed #8294a3; background: rgba(255, 255, 255, .58); }
+.layer-slot-label { color: #6b7885; cursor: default; }
+.layer-slot.silicon { background: linear-gradient(#dceaf1 0 36%, #e9eef2 36%); }
 .rear-contact { background: #687788; color: #fff; }
 .silicon { display: flex; flex-direction: column; }
 .silicon button { width: 100%; border: 1px solid #000; font-size: 12px; cursor: pointer; }
@@ -70,6 +79,8 @@
 .view-toggle:focus-visible { outline: 2px solid #315c89; outline-offset: 2px; }
 .top-cell { display: block; width: min(100%, 260px); margin: auto; padding: 0; border: 1px solid #000; background: none; cursor: pointer; }
 .top-cell svg { display: block; width: 100%; overflow: hidden; }
+.top-cell-placeholder { border: 0; cursor: default; }
+.top-cell-placeholder rect { fill: rgba(255, 255, 255, .58); stroke: #8294a3; stroke-width: 2; stroke-dasharray: 8 6; }
 .top-cell[aria-pressed="true"] { outline: 2px solid #ba6c00; outline-offset: 2px; }
 .top-view-caption { margin-top: 12px; font-size: 11px; }
 .load-resistor { display: block; width: min(100%, 260px); margin: 28px auto 0; padding: 8px; border: 1px solid transparent; background: none; color: #243244; cursor: pointer; font-size: 12px; }

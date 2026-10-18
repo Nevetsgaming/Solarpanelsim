@@ -18,7 +18,6 @@ function App() {
   }
 
   function resetAssembly() {
-    setPlacedPartCount(0)
     setSelectedPartId(null)
     setSettings(defaultSettings)
   }

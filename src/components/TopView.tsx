@@ -8,8 +8,6 @@ type TopViewProps = {
 }
 
 export default function TopView({ placedPartCount, settings, selectedPartId, onSelectPart }: TopViewProps) {
-  if (placedPartCount === 0) return null
-
   // Same 60 px/mm scale as the cross-section. Busbar geometry stays fixed.
   const size = 260
   const fingerWidth = settings.fingerWidth / 1000 * 60
@@ -19,6 +17,18 @@ export default function TopView({ placedPartCount, settings, selectedPartId, onS
   const hasFrontContacts = placedPartCount >= 4
   const topPartId = hasFrontContacts ? 'front-contacts' : placedPartCount === 3 ? 'coating' : placedPartCount === 2 ? 'silicon' : 'rear-contact'
   const surfaceColour = placedPartCount >= 3 ? '#b4d5df' : placedPartCount >= 2 ? '#324f70' : '#687788'
+
+  if (placedPartCount === 0) {
+    return (
+      <div className="top-view">
+        <div className="top-cell top-cell-placeholder" role="img" aria-label="Empty solar cell top view">
+          <svg viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
+            <rect x="1" y="1" width={size - 2} height={size - 2} />
+          </svg>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="top-view">
