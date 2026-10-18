@@ -1,8 +1,8 @@
 # Solar Cell Lab
 
-A hackathon project for learning how a solar cell works by building one and changing its design.
+Hackathon project for learning how a solar cell works by building one and changing its design.
 
-Instead of starting with a page of equations, try changing something and see what happens. Wider metal fingers carry current more easily, but also block more sunlight. Thicker silicon absorbs more light, but the benefit depends on the wavelength.
+Instead of starting with a page of equations, try changing something and see what happens.
 
 ## What you can do
 
@@ -14,25 +14,6 @@ Instead of starting with a page of equations, try changing something and see wha
 
 The app finds the best current–voltage combination automatically, as if an ideal controller were connected to the cell. Saved designs stay in memory until you refresh the page.
 
-## Run it locally
-
-Use Node.js 24 and npm. From the project folder:
-
-```sh
-npm install
-npm run dev
-```
-
-Open the local address printed in the terminal. On Windows, use `npm.cmd` if PowerShell blocks `npm`.
-
-Other commands:
-
-```sh
-npm test         # Run the automated tests
-npm run lint     # Check the code
-npm run build    # Create a production build in dist/
-npm run preview  # Preview that build locally
-```
 
 ## How it is built
 
@@ -47,13 +28,6 @@ To follow the code:
 - [electrical.ts](src/physics/electrical.ts) calculates shading, resistance, current, voltage and maximum power.
 - [data/](src/data/) contains the silicon absorption and solar-spectrum tables.
 
-## A few limitations
-
-This is one simplified 1 m² silicon cell, not a commercial panel made from many connected cells. Temperature and charge collection are fixed, light passes through the silicon once, and the drawing is not to scale.
-
-Coating thickness and rear-contact thickness change the picture only. Reflection is set separately. Quarter-wave coatings are explained, not simulated. Thicker silicon improves absorption without adding a thickness-dependent electrical penalty.
-
-The results explain trends; they are not predictions for a real panel. [MODEL.md](MODEL.md) documents the equations, assumptions and sources.
 
 ## Sources
 
