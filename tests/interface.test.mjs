@@ -26,6 +26,17 @@ test('finger-width feedback shows current contact shading and resistance only fo
     assert.ok(wide.electrical.unshadedFraction < narrow.electrical.unshadedFraction)
     assert.ok(wide.electrical.fingerResistance < narrow.electrical.fingerResistance)
     assert.ok(!render(defaultSettings, 'silicon').markup.includes('Light blocked by contacts'))
+    const { default: OpticsReadout } = await server.ssrLoadModule('/src/components/OpticsReadout.tsx')
+    for (const isSunlight of [false, true]) {
+      const props = { wavelengthNm: 550, thicknessUm: 180, hasSilicon: true, reflectedPercent: 5, isSunlight, unshadedFraction: 0 }
+      const covered = renderToStaticMarkup(createElement(OpticsReadout, props))
+      assert.ok(covered.includes('Where the light goes') && covered.includes('so power is zero'))
+      assert.ok(covered.includes('<dt>Can generate charge</dt><dd>0.0</dd>'))
+      const partial = renderToStaticMarkup(createElement(OpticsReadout, { ...props, unshadedFraction: 0.8 }))
+      const counts = [...partial.matchAll(/<dd>([\d.]+)<\/dd>/g)].map((match) => Number(match[1]))
+      assert.equal(counts.length, 4)
+      assert.ok(Math.abs(counts.reduce((sum, value) => sum + value, 0) - 100) < 0.2)
+    }
   } finally { await server.close() }
 })
 
@@ -63,8 +74,8 @@ test('power modes render matching voltage/current, and the formula explorer star
     const { default: App } = await server.ssrLoadModule('/src/App.tsx')
     const app = renderToStaticMarkup(createElement(App))
     assert.equal((app.match(/class="power-box"/g) ?? []).length, 1)
-    assert.ok(app.indexOf('class="power-box"') > app.indexOf('panel panel-learning'))
-    assert.ok(app.indexOf('class="power-box"') < app.indexOf('class="inspector-empty"'))
+    assert.ok(app.indexOf('class="power-box"') > app.indexOf('panel panel-visualization'))
+    assert.ok(app.indexOf('class="power-box"') < app.indexOf('panel panel-learning'))
 
     const narrow = renderToStaticMarkup(createElement(ContactCrossSection, { fingerWidth: 60, fingerSpacing: 1.5 }))
     const wide = renderToStaticMarkup(createElement(ContactCrossSection, { fingerWidth: 120, fingerSpacing: 1.5 }))

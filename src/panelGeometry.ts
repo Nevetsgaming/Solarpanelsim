@@ -16,11 +16,6 @@ export function contactGeometry(fingerWidthUm: number, fingerSpacingMm: number) 
   return { fingerWidthMm, fingerSpacingMm, fingerCount }
 }
 
-export function minimumFingerSpacing(fingerWidthUm: number) {
-  // Keep at least a 0.1 mm gap, rounded up to the spacing slider's step.
-  return Math.max(0.5, Math.ceil((fingerWidthUm / 1000 + 0.1) * 10) / 10)
-}
-
 export function contactSection(fingerWidthUm: number, fingerSpacingMm: number) {
   const { fingerWidthMm } = contactGeometry(fingerWidthUm, fingerSpacingMm)
   // Show three representative fingers so narrow contacts remain legible.

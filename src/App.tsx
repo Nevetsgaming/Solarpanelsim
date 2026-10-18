@@ -5,7 +5,6 @@ import LearningPanel from './components/LearningPanel'
 import { parts } from './parts'
 import { defaultSettings } from './partOptions'
 import type { SettingName } from './partOptions'
-import { minimumFingerSpacing } from './panelGeometry'
 import { calculateElectrical } from './physics/electrical'
 import type { OperatingMode } from './physics/electrical'
 import FormulaExplorer from './components/FormulaExplorer'
@@ -24,11 +23,7 @@ function App() {
 
   function changeSetting(name: SettingName, value: number) {
     if (name === 'loadResistance') setOperatingMode('load')
-    setSettings((current) => {
-      const next = { ...current, [name]: value }
-      next.fingerSpacing = Math.max(next.fingerSpacing, minimumFingerSpacing(next.fingerWidth))
-      return next
-    })
+    setSettings((current) => ({ ...current, [name]: value }))
   }
 
   function resetAssembly() {
@@ -61,8 +56,8 @@ function App() {
       <main>
         <div className="workspace">
           <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} onUndo={undoLayer} electrical={electrical} />
-          <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} />
-          <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical} operatingMode={operatingMode} onOperatingModeChange={setOperatingMode} onExplore={setFormulaTopic} />
+          <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} electrical={electrical} operatingMode={operatingMode} onOperatingModeChange={setOperatingMode} onExplore={setFormulaTopic} />
+          <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical} />
         </div>
       </main>
       {formulaTopic && <FormulaExplorer topic={formulaTopic} mode={operatingMode} results={electrical} operating={operatingMode === 'mpp' ? electrical.mpp : electrical.load} settings={settings} isSunlight={isSunlight} onClose={() => setFormulaTopic(null)} />}

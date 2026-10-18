@@ -9,6 +9,26 @@ function close(actual: number, expected: number, tolerance = 1e-7) {
   assert.ok(Math.abs(actual - expected) <= tolerance * Math.max(1, Math.abs(expected)), `${actual} differs from ${expected}`)
 }
 
+test('touching or overlapping fingers block all light and give exactly zero electrical output', () => {
+  for (const fingerSpacing of [0.5, 1.5, 250]) {
+    for (const fingerWidth of [fingerSpacing * 1000, 250000]) {
+      for (const isSunlight of [false, true]) {
+        const result = calculateElectrical({ ...defaultSettings, fingerWidth, fingerSpacing }, isSunlight, true)
+        assert.equal(result.unshadedFraction, 0)
+        assert.equal(result.photocurrent, 0)
+        assert.equal(result.mpp.power, 0)
+        assert.equal(result.load.power, 0)
+      }
+    }
+  }
+})
+
+test('partially visible edge fingers match the repeating visual pattern', () => {
+  // Centres at 150, 450, 750 and 1050 mm; the last contributes 50 mm.
+  const result = contactLosses({ ...defaultSettings, fingerWidth: 200000, fingerSpacing: 300 })
+  close(result.unshadedFraction, (1 - 650 / 1000) * 0.99)
+})
+
 test('source spectrum retains its full optical power, including unusable infrared', () => {
   assert.ok(referenceSpectrumPower > 1000 && referenceSpectrumPower < 1001)
   assert.ok(solarPhotonFlux > 3e21 && solarPhotonFlux < 6e21)

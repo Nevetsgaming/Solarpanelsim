@@ -39,7 +39,7 @@ export const partOptions: Record<string, PartOption[]> = {
     { key: 'coatingThickness', label: 'Coating thickness', unit: 'nm', min: 40, max: 150, step: 1 },
   ],
   'front-contacts': [
-    { key: 'fingerWidth', label: 'Finger width', unit: 'µm', min: 20, max: 100000, step: 1 },
-    { key: 'fingerSpacing', label: 'Centre-to-centre spacing', unit: 'mm', min: 0.5, max: 200, step: 0.1 },
+    { key: 'fingerWidth', label: 'Finger width', unit: 'µm', min: 20, max: 250000, step: 1 },
+    { key: 'fingerSpacing', label: 'Centre-to-centre spacing', unit: 'mm', min: 0.5, max: 500, step: 0.1 },
   ],
 }

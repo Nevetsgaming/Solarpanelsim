@@ -41,10 +41,11 @@ exaggerated. The active footprint is fixed at 1000 × 1000 mm (1 m²).
 This is a simplified continuous-grid teaching model, not a manufactured module
 with separate silicon cells, gaps, glass, frame, encapsulant and interconnects.
 Top-view SVG coordinates are millimetres; finger width converts from µm to mm.
-Finger width ranges from 20 to 100,000 µm (10 cm; default 60 µm) for exploration;
+Finger width ranges from 20 to 250,000 µm (25 cm; default 60 µm) for exploration;
 the extended range is not a recommendation for a practical grid. Centre spacing
-ranges from 0.5 to 200 mm (default 1.5), with at least a 0.1 mm gap between fingers.
-Increasing width automatically increases spacing if necessary to prevent overlap.
+ranges from 0.5 to 500 mm (default 1.5), independently of width.
+Touching or overlapping fingers fully cover the surface and produce zero power.
+Coverage includes partial edge fingers and counts overlapping metal only once.
 The default layout has 667 finger centres across the width.
 The 20 × 20 mm contact detail uses the same physical proportions as the overview.
 The cross-section cuts across fingers, between the busbars, so finger width and

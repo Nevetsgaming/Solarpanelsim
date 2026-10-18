@@ -7,6 +7,9 @@ import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
 import { contactSection } from '../panelGeometry'
 import { wavelengthColour } from '../rendering/wavelengthColour'
+import PowerReadout from './PowerReadout'
+import type { ReadingTopic } from './PowerReadout'
+import type { ElectricalResults, OperatingMode } from '../physics/electrical'
 
 type CellVisualizationProps = {
   placedPartCount: number
@@ -16,9 +19,13 @@ type CellVisualizationProps = {
   onWavelengthChange: (value: number) => void
   isSunlight: boolean
   onLightModeChange: (isSunlight: boolean) => void
+  electrical: ElectricalResults
+  operatingMode: OperatingMode
+  onOperatingModeChange: (mode: OperatingMode) => void
+  onExplore: (topic: ReadingTopic) => void
 }
 
-export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange, electrical, operatingMode, onOperatingModeChange, onExplore }: CellVisualizationProps) {
   const [isTopView, setIsTopView] = useState(false)
   const { sectionWidthMm } = contactSection(settings.fingerWidth, settings.fingerSpacing)
 
@@ -29,6 +36,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
         <button type="button" aria-pressed={isTopView} onClick={() => setIsTopView(true)}>Top view</button>
       </div>
     }>
+      <div className="canvas-readings"><PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplore} /></div>
       <div className="assembly-area" data-drop-zone>
         <button type="button" className="assembly-sun" style={{ color: isSunlight ? '#c49327' : wavelengthColour(settings.wavelengthNm) }} aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>
           <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="13" fill="currentColor" /><path d="M32 3V10 M32 54V61 M3 32H10 M54 32H61 M11 11L16 16 M48 48L53 53 M11 53L16 48 M48 16L53 11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>

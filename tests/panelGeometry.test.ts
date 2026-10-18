@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { contactGeometry, contactSection, minimumFingerSpacing, panelGeometry } from '../src/panelGeometry.ts'
+import { contactGeometry, contactSection, panelGeometry } from '../src/panelGeometry.ts'
 
 test('panel footprint is one square metre and default grid uses micrometre-wide fingers', () => {
   assert.equal(panelGeometry.widthMm * panelGeometry.heightMm / 1e6, 1)
@@ -14,14 +14,11 @@ test('spacing endpoints give expected counts across a metre', () => {
   assert.equal(contactGeometry(60, 3).fingerCount, 333)
 })
 
-test('10 cm fingers fit with automatically increased spacing', () => {
-  const spacing = minimumFingerSpacing(100000)
-  const grid = contactGeometry(100000, spacing)
-  assert.equal(grid.fingerWidthMm, 100)
-  assert.equal(spacing, 100.1)
-  assert.equal(grid.fingerCount, 10)
-  assert.ok(grid.fingerWidthMm < grid.fingerSpacingMm)
-  assert.equal(minimumFingerSpacing(60), 0.5)
+test('25 cm fingers leave the selected spacing unchanged and can overlap', () => {
+  const grid = contactGeometry(250000, 1.5)
+  assert.equal(grid.fingerWidthMm, 250)
+  assert.equal(grid.fingerSpacingMm, 1.5)
+  assert.ok(grid.fingerWidthMm > grid.fingerSpacingMm)
 })
 
 test('cross-section uses actual finger widths and centre-to-centre spacing', () => {

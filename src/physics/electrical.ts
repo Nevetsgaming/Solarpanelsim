@@ -24,10 +24,13 @@ export function contactLosses(settings: PartSettings) {
   const widthMm = settings.fingerWidth / 1000
   const pitchMm = settings.fingerSpacing
   let coveredWidthMm = 0
-  for (let centre = pitchMm / 2; centre < panelGeometry.widthMm; centre += pitchMm) {
-    coveredWidthMm += Math.max(0, Math.min(panelGeometry.widthMm, centre + widthMm / 2) - Math.max(0, centre - widthMm / 2))
+  // Match the repeating top-view pattern, including partial fingers at the edge.
+  // At width >= pitch every pattern tile is metal: overlaps count only once.
+  for (let centre = pitchMm / 2; centre - Math.min(widthMm, pitchMm) / 2 < panelGeometry.widthMm; centre += pitchMm) {
+    const effectiveWidth = Math.min(widthMm, pitchMm)
+    coveredWidthMm += Math.max(0, Math.min(panelGeometry.widthMm, centre + effectiveWidth / 2) - Math.max(0, centre - effectiveWidth / 2))
   }
-  const fingerShade = Math.min(1, coveredWidthMm / panelGeometry.widthMm)
+  const fingerShade = widthMm >= pitchMm ? 1 : Math.min(1, coveredWidthMm / panelGeometry.widthMm)
   const busbarShade = panelGeometry.busbarPositionsMm.length * panelGeometry.busbarWidthMm / panelGeometry.heightMm
   // Union of fingers and busbars: do not count their overlapping areas twice.
   const unshadedFraction = (1 - fingerShade) * (1 - busbarShade)

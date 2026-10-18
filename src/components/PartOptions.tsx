@@ -1,7 +1,7 @@
 import { learningTopics } from '../parts'
 import { partOptions } from '../partOptions'
 import type { PartSettings, SettingName } from '../partOptions'
-import { contactGeometry, minimumFingerSpacing, panelGeometry } from '../panelGeometry'
+import { contactGeometry, panelGeometry } from '../panelGeometry'
 import type { ElectricalResults } from '../physics/electrical'
 
 type PartOptionsProps = {
@@ -28,7 +28,7 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
           <input
             id={option.key}
             type="range"
-            min={option.logarithmic ? Math.log10(option.min) : option.key === 'fingerSpacing' ? minimumFingerSpacing(settings.fingerWidth) : option.min}
+            min={option.logarithmic ? Math.log10(option.min) : option.min}
             max={option.logarithmic ? Math.log10(option.max) : option.max}
             step={option.logarithmic ? 0.01 : option.step}
             value={option.logarithmic ? Math.log10(settings[option.key]) : settings[option.key]}
@@ -60,7 +60,7 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
         : partId === 'coating'
           ? 'Choose how much light bounces away using the reflection slider. Changing the thickness only changes the picture here; it does not calculate a new reflected percentage.'
         : partId === 'front-contacts'
-          ? 'You can make fingers as wide as 10 cm (100,000 µm) to explore extreme shading. If needed, we increase their spacing so they do not overlap. Switch to Top view to see the layout and a close-up.'
+          ? 'Finger width goes up to 25 cm (250,000 µm). Spacing stays where you set it. When fingers meet or overlap, metal covers the whole surface and no light can generate power. Switch to Top view to see the coverage.'
           : 'This slider changes the picture, not the electrical calculation. We exaggerate layer thicknesses so they are easier to see.'}</p>}
     </section>
   )
