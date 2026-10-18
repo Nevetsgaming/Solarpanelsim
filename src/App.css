@@ -141,7 +141,7 @@ button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 .canvas-readings .power-help { margin-top: .35rem; }
 .canvas-readings .electrical-mode { margin-bottom: .5rem; }
 .canvas-readings .electrical-readings { margin-top: .4rem; padding-top: .4rem; gap: .5rem; }
-.panel-visualization .assembly-area { padding-top: 21rem; }
+.panel-visualization .assembly-area { padding-top: 18rem; }
 .panel-visualization .assembly-sun { left: clamp(12rem, 28%, 16rem); }
 .bandgap-info { position: absolute; top: 1.8rem; left: 1rem; width: 8rem; }
 .bandgap-button { display: flex; flex-direction: column; gap: .25rem; width: 100%; min-height: 3.5rem; padding: .6rem; border: 1px solid var(--border); border-radius: 6px; background: #ffffffb3; color: #51677f; text-align: left; cursor: pointer; }
