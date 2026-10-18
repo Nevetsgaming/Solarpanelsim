@@ -30,6 +30,12 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
           <h3>{selectedPart.name}</h3>
           <p>{selectedPart.description}</p>
           {selectedPart.detail && <details className="part-detail"><summary>Why it works</summary><p>{selectedPart.detail}</p></details>}
+          {['silicon', 'emitter', 'base'].includes(selectedPart.id) && (
+            <div className="animation-link">
+              <a className="watch-animation" href="https://www.pveducation.org/pvcdrom/solar-cell-operation/light-generated-current" target="_blank" rel="noopener noreferrer">Watch animation <span className="small-note">(opens in a new tab)</span></a>
+              <p className="animation-credit">Animation by Christiana Honsberg and Stuart Bowden, <a href="https://www.pveducation.org/pvcdrom/solar-cell-operation/light-generated-current" target="_blank" rel="noopener noreferrer">PVEducation</a>. Shows charge flow at short circuit.</p>
+            </div>
+          )}
           {sunReadings && (
             <dl className="sun-readings">
               <div><dt>Photon energy</dt><dd>{sunReadings.energyEv.toFixed(3)} eV</dd></div>

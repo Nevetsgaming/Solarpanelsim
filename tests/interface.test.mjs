@@ -56,6 +56,18 @@ test('power modes render matching voltage/current, and the formula explorer star
     const { defaultSettings } = await server.ssrLoadModule('/src/partOptions.ts')
     const results = calculateElectrical(defaultSettings, true, true)
     const noop = () => {}
+    const { default: LearningPanel } = await server.ssrLoadModule('/src/components/LearningPanel.tsx')
+    for (const selectedPartId of ['silicon', 'emitter', 'base', 'sun', 'front-contacts', null]) {
+      const inspector = renderToStaticMarkup(createElement(LearningPanel, { selectedPartId, settings: defaultSettings, electrical: results, hasSilicon: true, hasCoating: true, isSunlight: true }))
+      const shouldShow = ['silicon', 'emitter', 'base'].includes(selectedPartId)
+      assert.equal(inspector.includes('Watch animation'), shouldShow)
+      if (shouldShow) {
+        assert.ok(inspector.includes('Christiana Honsberg and Stuart Bowden'))
+        assert.ok(inspector.includes('target="_blank"') && inspector.includes('rel="noopener noreferrer"'))
+        assert.ok(inspector.includes('https://www.pveducation.org/pvcdrom/solar-cell-operation/light-generated-current'))
+        assert.ok(!inspector.includes('<iframe'))
+      }
+    }
     const mpp = renderToStaticMarkup(createElement(PowerReadout, { results, mode: 'mpp', onModeChange: noop, onExplore: noop }))
     const load = renderToStaticMarkup(createElement(PowerReadout, { results, mode: 'load', onModeChange: noop, onExplore: noop }))
     assert.ok(mpp.includes('Maximum power (P<sub>max</sub>)') && mpp.includes(results.mpp.power.toFixed(2)))
@@ -73,6 +85,19 @@ test('power modes render matching voltage/current, and the formula explorer star
     assert.ok(formula.includes('aria-label="Power = voltage × current"'))
     assert.ok(!formula.includes('aria-label="Elementary charge'))
     assert.ok(!formula.includes('aria-label="Temperature'))
+    assert.ok(formula.includes('aria-expanded="false"'))
+    const { default: FormulaBreakdown } = await server.ssrLoadModule('/src/components/FormulaBreakdown.tsx')
+    const { expandableGroups } = await server.ssrLoadModule('/src/formulaGroups.ts')
+    for (const group of expandableGroups) {
+      const breakdown = renderToStaticMarkup(createElement(FormulaBreakdown, { group, mode: 'load', onClose: noop }))
+      assert.ok(breakdown.includes('Inside this group') && breakdown.includes('class="formula-symbol"'))
+      assert.ok(breakdown.includes('aria-describedby="symbol-explanation"'))
+      assert.ok(!breakdown.includes('<button type="button" class="formula-symbol"><button'), 'symbols must not nest buttons')
+    }
+    const bandgap = renderToStaticMarkup(createElement(FormulaBreakdown, { group: 'cutoff', mode: 'mpp', onClose: noop }))
+    assert.ok(bandgap.includes('Planck constant') && bandgap.includes('Speed of light') && bandgap.includes('Bandgap energy'))
+    const diode = renderToStaticMarkup(createElement(FormulaBreakdown, { group: 'diodeLoss', mode: 'mpp', onClose: noop }))
+    assert.ok(diode.includes('Elementary charge') && diode.includes('Temperature') && diode.includes('Diode ideality factor'))
     const current = renderToStaticMarkup(createElement(FormulaExplorer, { topic: 'current', results, operating: results.mpp, settings: defaultSettings, isSunlight: true, onClose: noop }))
     const voltage = renderToStaticMarkup(createElement(FormulaExplorer, { topic: 'voltage', mode: 'load', results, operating: results.load, settings: defaultSettings, isSunlight: true, onClose: noop }))
     assert.ok(current.includes('How current is calculated') && current.includes('Current tells us how much electric charge'))

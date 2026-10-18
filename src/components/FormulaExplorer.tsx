@@ -5,6 +5,8 @@ import { device, saturationCurrent } from '../physics/electrical'
 import type { PartSettings } from '../partOptions'
 import type { OperatingMode } from '../physics/electrical'
 import type { ReadingTopic } from './PowerReadout'
+import FormulaBreakdown from './FormulaBreakdown'
+import { expandableGroups } from '../formulaGroups'
 
 type FormulaExplorerProps = {
   results: ElectricalResults
@@ -20,6 +22,7 @@ export default function FormulaExplorer({ results, operating, settings, isSunlig
   const dialog = useRef<HTMLDialogElement>(null)
   const [formula, setFormula] = useState<'diode' | 'photocurrent'>('diode')
   const [selectedTerm, setSelectedTerm] = useState(topic === 'current' ? 'I' : topic === 'voltage' ? 'voltage' : 'power')
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
 
   useEffect(() => {
     const modal = dialog.current!
@@ -48,8 +51,13 @@ export default function FormulaExplorer({ results, operating, settings, isSunlig
 
   function term(id: string, label: ReactNode, drillDown = false) {
     return <button type="button" className="formula-term" aria-label={`${definitions[id].name}${drillDown ? ': open photocurrent integral' : ''}`}
-      onMouseEnter={() => setSelectedTerm(id)} onFocus={() => setSelectedTerm(id)}
-      onClick={() => { setSelectedTerm(id); if (drillDown) { setFormula('photocurrent'); setSelectedTerm('integral') } }}
+      aria-expanded={expandableGroups.includes(id) ? expandedGroup === id : undefined}
+      onMouseEnter={() => { if (!expandedGroup) setSelectedTerm(id) }} onFocus={() => { if (!expandedGroup) setSelectedTerm(id) }}
+      onClick={() => {
+        setSelectedTerm(id)
+        setExpandedGroup(expandableGroups.includes(id) ? id : null)
+        if (drillDown) { setFormula('photocurrent'); setSelectedTerm('integral'); setExpandedGroup(null) }
+      }}
       title={definitions[id].text}>{label}</button>
   }
 
@@ -57,10 +65,10 @@ export default function FormulaExplorer({ results, operating, settings, isSunlig
     <dialog ref={dialog} className="formula-dialog" aria-labelledby="formula-heading" onCancel={(event) => { event.preventDefault(); onClose() }} onClick={(event) => { if (event.target === event.currentTarget) onClose() }}>
       <div className="formula-dialog-content">
         <header className="formula-dialog-header"><h2 id="formula-heading">How {topic} is calculated</h2><button type="button" className="formula-close" onClick={onClose} aria-label="Close formula explorer">×</button></header>
-        <p className="formula-instruction">Hover a highlighted group to learn what it does. Tap on touch screens. Select I<sub>ph</sub> to look inside it.</p>
+        <p className="formula-instruction">Hover a group for the main idea. Click it to explore its individual symbols below. Select I<sub>ph</sub> to open the photon integral.</p>
         <div className="formula-line power-equation">{term('power', 'P = V × I')}</div>
         {topic === 'voltage' && <div className="formula-line">{term('voltage', mode === 'load' ? <>V = I × R<sub>load</sub></> : <>V<sub>mp</sub>: the voltage where V × I is largest</>)}</div>}
-        <nav className="formula-navigation" aria-label="Formula"><button type="button" aria-current={formula === 'diode' ? 'page' : undefined} onClick={() => { setFormula('diode'); setSelectedTerm('Iph') }}>Single diode</button><span aria-hidden="true">›</span><button type="button" aria-current={formula === 'photocurrent' ? 'page' : undefined} onClick={() => { setFormula('photocurrent'); setSelectedTerm('integral') }}>Photocurrent integral</button></nav>
+        <nav className="formula-navigation" aria-label="Formula"><button type="button" aria-current={formula === 'diode' ? 'page' : undefined} onClick={() => { setFormula('diode'); setSelectedTerm('Iph'); setExpandedGroup(null) }}>Single diode</button><span aria-hidden="true">›</span><button type="button" aria-current={formula === 'photocurrent' ? 'page' : undefined} onClick={() => { setFormula('photocurrent'); setSelectedTerm('integral'); setExpandedGroup(null) }}>Photocurrent integral</button></nav>
 
         {formula === 'diode' ? (
           <div className="formula-line" aria-label="Illuminated single-diode equation with series and shunt resistance">
@@ -79,6 +87,7 @@ export default function FormulaExplorer({ results, operating, settings, isSunlig
         <div className="term-explanation" aria-live="polite"><h3>{definitions[selectedTerm].name}</h3><p>{definitions[selectedTerm].text}</p>
           {definitions[selectedTerm].detail && <details key={selectedTerm}><summary>More detail</summary><p>{definitions[selectedTerm].detail}</p></details>}
         </div>
+        {expandedGroup && <FormulaBreakdown key={expandedGroup} group={expandedGroup} mode={mode} onClose={() => setExpandedGroup(null)} />}
         {!results.assembled && <p>Finish adding the four layers first. Until then, these numbers describe the design you are setting up, not a working cell.</p>}
         <details className="model-assumptions"><summary>Parameters, calibration & sources</summary>
           <p>We keep temperature, charge collection and a few electrical properties fixed so you can focus on your design. This is a simplified 1 m² cell for learning—not a prediction of a real panel’s output.</p>
