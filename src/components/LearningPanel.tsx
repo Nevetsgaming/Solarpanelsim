@@ -15,13 +15,14 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
   const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
 
   return (
-    <Panel id="learning" title="Understand">
+    <Panel id="learning" title="Inspector">
       {selectedPart?.description && (
         <div className="part-explanation">
           <h3>{selectedPart.name}</h3>
           <p>{selectedPart.description}</p>
         </div>
       )}
+      {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Select a layer, the sun, or the load to see what it does.</p></div>}
       {isSunlight ? (
         <section className="optics-readout" aria-label="Sunlight mode">
           <h3>Sunlight spectrum</h3>

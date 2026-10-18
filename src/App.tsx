@@ -30,6 +30,12 @@ function App() {
     setIsSunlight(false)
   }
 
+  function undoLayer() {
+    if (placedPartCount === 0) return
+    setPlacedPartCount(placedPartCount - 1)
+    setSelectedPartId(parts[placedPartCount - 2]?.id ?? null)
+  }
+
   function placePart(partId: string) {
     if (!parts.some((part) => part.id === partId)) return
     setSelectedPartId(partId)
@@ -40,13 +46,13 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <div className="brand"><span className="brand-mark" aria-hidden="true">☀</span>Solar Cell Lab</div>
-
+        <h1 className="brand"><span className="brand-mark" aria-hidden="true">☀</span>Solar Cell Lab</h1>
+        <span className="project-meta">Silicon <span aria-hidden="true">/</span> 1 m × 1 m</span>
       </header>
       <main>
         <div className="workspace">
-          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} />
-          <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} />
+          <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} onUndo={undoLayer} />
+          <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} />
           <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} />
         </div>
       </main>

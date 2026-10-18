@@ -22,7 +22,7 @@ export default function TopView({ placedPartCount, settings, selectedPartId, onS
 
   return (
     <div className="top-view">
-      <button type="button" className="top-cell" aria-label={`Top view: select ${topPartId.replaceAll('-', ' ')}`} aria-pressed={selectedPartId === topPartId} onClick={() => onSelectPart(topPartId)}>
+      <button type="button" className="top-cell" data-part-id={topPartId} aria-label={`Top view: select ${topPartId.replaceAll('-', ' ')}`} aria-pressed={selectedPartId === topPartId} onClick={() => onSelectPart(topPartId)}>
         <svg viewBox={`0 0 ${widthMm} ${heightMm}`} role="img" aria-label="One metre by one metre panel overview">
           <defs>
             <pattern id={patternId} patternUnits="userSpaceOnUse" width={fingerSpacingMm} height={heightMm}>

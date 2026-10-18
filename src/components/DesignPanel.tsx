@@ -1,6 +1,7 @@
 import Panel from './Panel'
 import { parts } from '../parts'
 import PartOptions from './PartOptions'
+import PartButton from './PartButton'
 import type { PartSettings, SettingName } from '../partOptions'
 
 type DesignPanelProps = {
@@ -12,34 +13,33 @@ type DesignPanelProps = {
   onSettingChange: (name: SettingName, value: number) => void
   onReset: () => void
   isSunlight: boolean
+  onUndo: () => void
 }
 
-export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset, isSunlight }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset, isSunlight, onUndo }: DesignPanelProps) {
   const selectedPart = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   return (
-    <Panel id="design" title="Parts">
+    <Panel id="design" title="Parts" headerAction={<span className="panel-meta">{placedPartCount} / {parts.length} placed</span>}>
       <div className="parts-list">
         {parts.map((part, index) => (
-          <button
+          <PartButton
             key={part.id}
-            className="part"
-            type="button"
-            aria-pressed={selectedPart === part.id}
-            draggable={index === placedPartCount}
-            onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', part.id)
-              event.dataTransfer.effectAllowed = 'copy'
-            }}
-            onClick={() => onPlacePart(part.id)}
-          >
-            {part.name}
-          </button>
+            id={part.id}
+            name={part.name}
+            selected={selectedPart === part.id}
+            canPlace={index === placedPartCount}
+            placed={index < placedPartCount}
+            onActivate={() => onPlacePart(part.id)}
+          />
         ))}
-        <button type="button" className="part" aria-pressed={selectedPartId === 'load'} onClick={() => onSelectPart('load')}>Load resistance</button>
-        <p className="part-hint">Click a part to learn. Drag or click the next part to place it.</p>
+        <button type="button" className="part load-part" aria-pressed={selectedPartId === 'load'} onClick={() => onSelectPart('load')}><span className="load-symbol" aria-hidden="true">Ω</span><span className="part-name">Load resistance</span></button>
+        <p className="part-hint">Drag the next part into the canvas, or click to place. Select any part to inspect it.</p>
       </div>
       <PartOptions selectedPartId={selectedPartId} settings={settings} onSettingChange={onSettingChange} isSunlight={isSunlight} />
-      <button type="button" className="reset-button" onClick={onReset}>Reset assembly</button>
+      <div className="assembly-actions">
+        <button type="button" className="reset-button" onClick={onUndo} disabled={placedPartCount === 0}>Undo layer</button>
+        <button type="button" className="reset-button" onClick={onReset}>Reset</button>
+      </div>
       <div className="power-box">
         <h3>Power</h3>
         <p className="power-value" aria-label="Power not yet calculated">— <span>W</span></p>
