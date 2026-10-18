@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Panel from './Panel'
 import TopView from './TopView'
+import CircuitView from './CircuitView'
 import Resistor from './Resistor'
 import ContactCrossSection from './ContactCrossSection'
 import { parts } from '../parts'
@@ -26,14 +27,15 @@ type CellVisualizationProps = {
 }
 
 export default function CellVisualization({ placedPartCount, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange, electrical, operatingMode, onOperatingModeChange, onExplore }: CellVisualizationProps) {
-  const [isTopView, setIsTopView] = useState(false)
+  const [view, setView] = useState<'cross-section' | 'top' | 'circuit'>('cross-section')
   const { sectionWidthMm } = contactSection(settings.fingerWidth, settings.fingerSpacing)
 
   return (
     <Panel id="visualization" title="Assembly" headerAction={
       <div className="view-controls" role="group" aria-label="Assembly view">
-        <button type="button" aria-pressed={!isTopView} onClick={() => setIsTopView(false)}>Cross-section</button>
-        <button type="button" aria-pressed={isTopView} onClick={() => setIsTopView(true)}>Top view</button>
+        <button type="button" aria-pressed={view === 'cross-section'} onClick={() => setView('cross-section')}>Cross-section</button>
+        <button type="button" aria-pressed={view === 'top'} onClick={() => setView('top')}>Top view</button>
+        <button type="button" aria-pressed={view === 'circuit'} onClick={() => setView('circuit')}>Circuit view</button>
       </div>
     }>
       <div className="canvas-readings"><PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplore} /></div>
@@ -53,7 +55,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
         </div>
 
         <div className="assembly-status">
-          {placedPartCount === 0 ? (
+          {view === 'circuit' ? <CircuitView results={electrical} settings={settings} mode={operatingMode} /> : placedPartCount === 0 ? (
             <div className="empty-assembly">
               <svg viewBox="0 0 80 64" aria-hidden="true"><path d="M8 22L40 6L72 22L40 38Z M8 34L40 50L72 34 M8 46L40 62L72 46" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /></svg>
               <h3>Start with the rear contact</h3>
@@ -62,7 +64,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
           ) : (
             <>
               <p className="assembly-hint" role="status">{parts[placedPartCount] ? `Next: ${parts[placedPartCount].name}` : 'Cell assembled'}</p>
-              {isTopView ? (
+              {view === 'top' ? (
                 <TopView placedPartCount={placedPartCount} settings={settings} selectedPartId={selectedPartId} onSelectPart={onSelectPart} />
               ) : (
                 <>
@@ -96,7 +98,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
               )}
             </>
           )}
-          <Resistor resistance={settings.loadResistance} selected={selectedPartId === 'load'} onSelect={() => onSelectPart('load')} />
+          {view !== 'circuit' && <Resistor resistance={settings.loadResistance} selected={selectedPartId === 'load'} onSelect={() => onSelectPart('load')} />}
         </div>
         <span className="canvas-caption">SILICON / 1 m² ACTIVE AREA</span>
       </div>
