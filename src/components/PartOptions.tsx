@@ -23,6 +23,8 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
   const siliconAbsorption = partId === 'silicon'
     ? lightBudget(settings.wavelengthNm, settings.siliconThickness, 0, 1, isSunlight, true).useful : 0
 
+  if (partId === 'sun') return null
+
   return (
     <section className="part-options" aria-labelledby="options-title">
       <h3 id="options-title">{selectedPart ? `${selectedPart.name} options` : 'Part options'}</h3>
@@ -74,9 +76,7 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
         <p>{contactGeometry(settings.fingerWidth, settings.fingerSpacing).fingerCount} fingers across 1 m. Fixed finger height: {panelGeometry.fingerHeightUm} µm. Two {panelGeometry.busbarWidthMm} mm busbars.</p>
       )}
       {partId === 'silicon' && <p>Fixed emitter depth: {panelGeometry.emitterThicknessUm} µm.</p>}
-      {options && <p>{partId === 'sun'
-        ? isSunlight ? 'Sunlight mixes many wavelengths together. Choose Constant wavelength if you want to explore one at a time with the slider beside the sun.' : 'Use the slider beside the sun to change the wavelength. We keep the incoming light power the same, so you can compare wavelengths fairly.'
-        : partId === 'load'
+      {options && <p>{partId === 'load'
           ? 'Choose the resistor connected to your cell. The logarithmic slider covers small and large loads; moving it selects Resistor load mode.'
         : partId === 'silicon'
           ? 'Thicker silicon absorbs more light, with diminishing gains. This model does not add a penalty for thickness, so there is no thickness optimum to find. Drawing not to scale.'

@@ -91,6 +91,10 @@ Colours identify silicon regions, not net charge. Reset restores all defaults.
 
 ## Solar spectrum and photocurrent
 
+The app starts and resets in sunlight mode. Constant wavelength remains available
+as an experiment mode. Sun controls live beside the sun, without a duplicate
+Sunlight options text section in Parts.
+
 Sunlight mode uses the ASTM G173-03 AM1.5 global-tilt column, 280–4000 nm.
 [Primary spectrum description and download](https://www.nlr.gov/grid/solar-resource/spectra-am1.5).
 The exact CSV table is bundled from the [pvlib mirror](https://raw.githubusercontent.com/pvlib/pvlib-python/main/pvlib/data/ASTMG173.csv)

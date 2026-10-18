@@ -19,7 +19,7 @@ function App() {
   const [placedPartCount, setPlacedPartCount] = useState(0)
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null)
   const [settings, setSettings] = useState(defaultSettings)
-  const [isSunlight, setIsSunlight] = useState(false)
+  const [isSunlight, setIsSunlight] = useState(true)
   const [operatingMode, setOperatingMode] = useState<OperatingMode>('mpp')
   const [formulaTopic, setFormulaTopic] = useState<ReadingTopic | null>(null)
   const [previous, setPrevious] = useState<DesignSnapshot | null>(null)
@@ -43,7 +43,7 @@ function App() {
     setPlacedPartCount(0)
     setSelectedPartId(null)
     setSettings(defaultSettings)
-    setIsSunlight(false)
+    setIsSunlight(true)
     setOperatingMode('mpp')
   }
 
