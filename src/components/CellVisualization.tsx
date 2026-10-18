@@ -2,9 +2,9 @@ import { useState } from 'react'
 import Panel from './Panel'
 import TopView from './TopView'
 import Resistor from './Resistor'
+import ContactCrossSection from './ContactCrossSection'
 import { parts } from '../parts'
 import type { PartSettings } from '../partOptions'
-import { contactGeometry, panelGeometry } from '../panelGeometry'
 
 type CellVisualizationProps = {
   placedPartCount: number
@@ -12,17 +12,13 @@ type CellVisualizationProps = {
   onSelectPart: (partId: string) => void
   settings: PartSettings
   selectedPartId: string | null
-  onReflectedPercentChange: (value: number) => void
+  onWavelengthChange: (value: number) => void
   isSunlight: boolean
   onLightModeChange: (isSunlight: boolean) => void
 }
 
-export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings, selectedPartId, onReflectedPercentChange, isSunlight, onLightModeChange }: CellVisualizationProps) {
+export default function CellVisualization({ placedPartCount, onPlacePart, onSelectPart, settings, selectedPartId, onWavelengthChange, isSunlight, onLightModeChange }: CellVisualizationProps) {
   const [isTopView, setIsTopView] = useState(false)
-  // The cross-section shows a 20 mm slice; full panel dimensions are in Top view.
-  const { fingerWidthMm } = contactGeometry(settings.fingerWidth, settings.fingerSpacing)
-  const fingerWidthPercent = fingerWidthMm / panelGeometry.detailWidthMm * 100
-  const fingerSpacingPercent = settings.fingerSpacing / panelGeometry.detailWidthMm * 100
 
   return (
     <Panel id="visualization" title="Assembly" headerAction={
@@ -40,17 +36,18 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
       >
         <button type="button" className="assembly-sun" aria-label="Sunlight options and explanation" aria-pressed={selectedPartId === 'sun'} onClick={() => onSelectPart('sun')}>☀</button>
         <div className="sun-slider option-control">
-          <label htmlFor="reflectedPercent">Light reflected</label>
-          <output htmlFor="reflectedPercent">{settings.reflectedPercent}%</output>
+          <label htmlFor="wavelengthNm">Wavelength</label>
+          <output htmlFor="wavelengthNm">{isSunlight ? 'Sunlight spectrum' : `${settings.wavelengthNm} nm`}</output>
           <input
-            id="reflectedPercent"
+            id="wavelengthNm"
             type="range"
-            min="0"
-            max="100"
+            min="300"
+            max="1200"
             step="1"
-            value={settings.reflectedPercent}
-            aria-valuetext={`${settings.reflectedPercent} percent`}
-            onChange={(event) => onReflectedPercentChange(Number(event.target.value))}
+            value={settings.wavelengthNm}
+            disabled={isSunlight}
+            aria-valuetext={`${settings.wavelengthNm} nanometres`}
+            onChange={(event) => onWavelengthChange(Number(event.target.value))}
           />
         </div>
         <div className="light-mode-controls" role="group" aria-label="Light source">
@@ -80,20 +77,23 @@ export default function CellVisualization({ placedPartCount, onPlacePart, onSele
                   <button
                     type="button"
                     className={`cell-layer ${part.id}`}
-                    aria-label={`Learn about ${part.name.toLowerCase()}`}
+                    aria-label={part.id === 'front-contacts' ? 'Front contacts: section along one finger showing two busbars' : `Learn about ${part.name.toLowerCase()}`}
                     aria-pressed={selectedPartId === part.id}
                     onClick={() => onSelectPart(part.id)}
                     style={part.id === 'rear-contact'
                       ? { height: 8 + settings.rearThickness * 0.6 }
                       : part.id === 'coating'
                         ? { height: 4 + settings.coatingThickness * 0.08 }
-                        : { background: `repeating-linear-gradient(90deg, #9da8b5 0 ${fingerWidthPercent}%, transparent ${fingerWidthPercent}% ${fingerSpacingPercent}%)` }}
-                  />
+                        : undefined}
+                  >
+                    {part.id === 'front-contacts' && <ContactCrossSection />}
+                  </button>
                 )}
               </div>
             ))}
           </div>
-          <p className="top-view-caption">20 mm cross-section detail · layer heights exaggerated</p>
+          <p className="top-view-caption">Along one finger · 1 m section · layer heights exaggerated</p>
+          {placedPartCount >= 4 && <p className="top-view-caption">Raised contacts: two 5 mm busbars. Finger width is visible in Top view.</p>}
           <div className="compact-layer-labels" aria-label="Select an assembled layer">
             {parts.slice(0, placedPartCount).reverse().map((part) => (
               <button type="button" key={part.id} aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>

@@ -26,7 +26,6 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
           <input
             id={option.key}
             type="range"
-            disabled={isSunlight && option.key === 'wavelengthNm'}
             min={option.key === 'fingerSpacing' ? minimumFingerSpacing(settings.fingerWidth) : option.min}
             max={option.max}
             step={option.step}
@@ -41,7 +40,7 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
       )}
       {partId === 'silicon' && <p>Fixed emitter depth: {panelGeometry.emitterThicknessUm} µm.</p>}
       {options && <p>{partId === 'sun'
-        ? isSunlight ? 'Sunlight contains many wavelengths. Switch to Constant wavelength to use this slider.' : 'Optical power stays fixed when wavelength changes.'
+        ? isSunlight ? 'Sunlight contains many wavelengths. Switch to Constant wavelength to use the slider beside the sun.' : 'Adjust wavelength beside the sun. Optical power stays fixed.'
         : partId === 'load'
           ? 'Resistance setting only. Current, voltage and power are not calculated yet.'
         : partId === 'silicon'

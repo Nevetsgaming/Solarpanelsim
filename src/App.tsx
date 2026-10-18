@@ -46,7 +46,7 @@ function App() {
       <main>
         <div className="workspace">
           <DesignPanel placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} selectedPartId={selectedPartId} settings={settings} onSettingChange={changeSetting} onReset={resetAssembly} isSunlight={isSunlight} />
-          <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onReflectedPercentChange={(value) => changeSetting('reflectedPercent', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} />
+          <CellVisualization placedPartCount={placedPartCount} onPlacePart={placePart} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={setIsSunlight} />
           <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} />
         </div>
       </main>
