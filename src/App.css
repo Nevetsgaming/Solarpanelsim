@@ -138,6 +138,17 @@
 .circuit-view p { margin: .8rem 0; }
 .circuit-view dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; padding: .4rem 0; border-bottom: 1px solid var(--border); }
 .circuit-view dd { margin: 0; font-family: var(--mono); }
+.circuit-image { position: relative; background: #fff; border: 1px solid var(--border); }
+.circuit-image img { display: block; width: 100%; height: auto; }
+.circuit-hotspot { position: absolute; padding: 0; border: 2px solid transparent; background: transparent; cursor: pointer; border-radius: 4px; }
+.circuit-hotspot:hover, .circuit-hotspot:focus-visible, .circuit-hotspot[aria-pressed='true'] { border-color: #2468c9; background: #2468c91a; }
+.circuit-choices { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0; }
+.circuit-choices button { padding: .5rem; min-height: 44px; border: 1px solid var(--border); border-radius: 5px; background: #fff; color: #25364b; font-size: .68rem; cursor: pointer; }
+.circuit-choices button[aria-pressed='true'] { background: #eaf2ff; border-color: #2468c9; }
+.circuit-explanation { padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+.circuit-component-formula { font-family: var(--mono); overflow-wrap: anywhere; }
+.circuit-current-formula { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.circuit-selected-term { background: #dceaff; color: #174f9d; border-radius: 3px; padding: .2rem; }
 .view-controls button, .light-mode-controls button { min-height: 2.5rem; padding: .35rem .65rem; border: none; border-radius: 6px; background: none; color: #657282; font-size: .7rem; font-weight: 550; cursor: pointer; }
 .view-controls button[aria-pressed='true'], .light-mode-controls button[aria-pressed='true'] { background: white; color: #25364b; box-shadow: 0 1px 4px rgb(25 40 60 / 12%); }
 .view-controls button:active, .light-mode-controls button:active { background: #dce5f1; }
