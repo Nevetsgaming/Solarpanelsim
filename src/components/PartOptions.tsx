@@ -4,6 +4,7 @@ import type { PartSettings, SettingName } from '../partOptions'
 import { contactGeometry, panelGeometry } from '../panelGeometry'
 import type { ElectricalResults } from '../physics/electrical'
 import { formatWidth, widthFromSlider, widthToSlider } from '../experiments'
+import { lightBudget } from '../physics/lightBudget'
 
 type PartOptionsProps = {
   selectedPartId: string | null
@@ -19,6 +20,8 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
   const partId = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   const selectedPart = learningTopics.find((part) => part.id === partId)
   const options = partId ? partOptions[partId] : undefined
+  const siliconAbsorption = partId === 'silicon'
+    ? lightBudget(settings.wavelengthNm, settings.siliconThickness, 0, 1, isSunlight, true).useful : 0
 
   return (
     <section className="part-options" aria-labelledby="options-title">
@@ -38,10 +41,15 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
             aria-valuetext={`${settings[option.key]} ${option.unit}`}
             onChange={(event) => {
               const raw = option.key === 'fingerWidth' ? widthFromSlider(Number(event.target.value)) : option.logarithmic ? 10 ** Number(event.target.value) : Number(event.target.value)
-              const value = option.key === 'fingerWidth' ? Math.round(raw) : Number(raw.toPrecision(6))
+              const value = option.key === 'fingerWidth' ? Math.round(raw) : option.key === 'siliconThickness' ? Math.round(raw * 10) / 10 : Number(raw.toPrecision(6))
               onSettingChange(option.key, Math.max(option.min, Math.min(option.max, value)))
             }}
           />
+          {option.key === 'siliconThickness' && <div className="contact-feedback">
+            <dl><div><dt>Useful photons absorbed*</dt><dd>{(siliconAbsorption * 100).toFixed(1)}%</dd></div></dl>
+            <p>*Ignoring reflection and metal shading. Only counts absorbed photons with enough energy to generate charge.</p>
+            <p>Try the thin end to see power drop. Near 1065 nm, thickness matters even for thicker layers. The slider uses a logarithmic scale.</p>
+          </div>}
           {option.key === 'fingerWidth' && (
             <div className="contact-feedback">
               <label htmlFor="finger-width-exact">Exact width (µm)</label>

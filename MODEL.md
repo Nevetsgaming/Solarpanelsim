@@ -6,6 +6,10 @@ Run their checks with `npm test` (Node.js 24 supports these TypeScript files dir
 ## Learning and comparison controls
 
 Finger width uses a logarithmic 20–250,000 µm slider, with an exact numeric input.
+Silicon thickness uses a logarithmic 1–1,000 µm range, rounded to 0.1 µm, with
+the default still at 180 µm. Thin layers expose a noticeable absorption/power
+change even at 550 nm; there is no artificial electrical sensitivity multiplier.
+The base drawing height is logarithmic too and remains explicitly not to scale.
 Large widths display in mm or cm; the exact input stays in µm. Rear-contact and
 coating thickness are marked Appearance only. Part descriptions and formula
 explanations show a short takeaway first, with optional details.

@@ -78,3 +78,19 @@ test('the fixed-condition finger challenge has an attainable improvement', () =>
   const candidates = [20, 30, 40, 80, 120, 200, 500].map((width) => snapshot({ ...defaultSettings, fingerWidth: width }).results.mpp.power)
   assert.ok(Math.max(...candidates) > baseline.results.mpp.power + 1e-6)
 })
+
+test('the thickness slider reaches thin layers with a noticeable physical power difference', () => {
+  const option = partOptions.silicon.find((item) => item.key === 'siliconThickness')!
+  assert.equal(option.min, 1)
+  assert.equal(option.max, 1000)
+  assert.equal(option.logarithmic, true)
+  for (const sunlight of [false, true]) {
+    const thin = calculateElectrical({ ...defaultSettings, siliconThickness: option.min }, sunlight, true)
+    const thick = calculateElectrical({ ...defaultSettings, siliconThickness: option.max }, sunlight, true)
+    assert.ok(thick.mpp.power > thin.mpp.power * 1.3)
+    assert.ok(thick.load.power > thin.load.power)
+  }
+  const thin = lightBudget(1065, 1, 0, 1, false, true)
+  const thick = lightBudget(1065, 1000, 0, 1, false, true)
+  assert.ok(thin.useful < 0.01 && thick.useful > 0.6)
+})

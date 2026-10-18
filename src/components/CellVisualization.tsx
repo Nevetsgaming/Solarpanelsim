@@ -76,7 +76,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
                         {part.id === 'silicon' ? (
                           <div className="silicon" data-selected={selectedPartId === 'silicon'}>
                             <button type="button" className="silicon-emitter" aria-pressed={selectedPartId === 'emitter'} onClick={() => onSelectPart('emitter')}>n-type emitter</button>
-                            <button type="button" className="silicon-base" aria-pressed={selectedPartId === 'base'} style={{ height: 40 + settings.siliconThickness * 0.4 }} onClick={() => onSelectPart('base')}>p-type base</button>
+                            <button type="button" className="silicon-base" aria-pressed={selectedPartId === 'base'} style={{ height: 40 + Math.log10(settings.siliconThickness + 1) * 45 }} onClick={() => onSelectPart('base')}>p-type base</button>
                           </div>
                         ) : (
                           <button type="button" className={`cell-layer ${part.id}`}

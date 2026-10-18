@@ -33,7 +33,7 @@ export const partOptions: Record<string, PartOption[]> = {
     { key: 'rearThickness', label: 'Metal thickness', unit: 'µm', min: 5, max: 50, step: 1, appearanceOnly: true },
   ],
   silicon: [
-    { key: 'siliconThickness', label: 'Absorber thickness', unit: 'µm', min: 50, max: 300, step: 1 },
+    { key: 'siliconThickness', label: 'Absorber thickness', unit: 'µm', min: 1, max: 1000, step: 0.1, logarithmic: true },
   ],
   coating: [
     { key: 'reflectedPercent', label: 'Light reflected', unit: '%', min: 0, max: 100, step: 1 },
