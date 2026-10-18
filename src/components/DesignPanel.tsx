@@ -2,6 +2,8 @@ import Panel from './Panel'
 import { parts } from '../parts'
 import PartOptions from './PartOptions'
 import PartButton from './PartButton'
+import PowerReadout from './PowerReadout'
+import type { ElectricalResults, OperatingMode } from '../physics/electrical'
 import type { PartSettings, SettingName } from '../partOptions'
 
 type DesignPanelProps = {
@@ -14,9 +16,13 @@ type DesignPanelProps = {
   onReset: () => void
   isSunlight: boolean
   onUndo: () => void
+  electrical: ElectricalResults
+  operatingMode: OperatingMode
+  onOperatingModeChange: (mode: OperatingMode) => void
+  onExplorePower: () => void
 }
 
-export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset, isSunlight, onUndo }: DesignPanelProps) {
+export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart, selectedPartId, settings, onSettingChange, onReset, isSunlight, onUndo, electrical, operatingMode, onOperatingModeChange, onExplorePower }: DesignPanelProps) {
   const selectedPart = selectedPartId === 'emitter' || selectedPartId === 'base' ? 'silicon' : selectedPartId
   return (
     <Panel id="design" title="Parts" headerAction={<span className="panel-meta">{placedPartCount} / {parts.length} placed</span>}>
@@ -40,14 +46,7 @@ export default function DesignPanel({ placedPartCount, onPlacePart, onSelectPart
         <button type="button" className="reset-button" onClick={onUndo} disabled={placedPartCount === 0}>Undo layer</button>
         <button type="button" className="reset-button" onClick={onReset}>Reset</button>
       </div>
-      <div className="power-box">
-        <h3>Power</h3>
-        <p className="power-value" aria-label="Power not yet calculated">— <span>W</span></p>
-        <div className="electrical-readings">
-          <div><h3>Current</h3><p aria-label="Current not yet calculated">— A</p></div>
-          <div><h3>Voltage</h3><p aria-label="Voltage not yet calculated">— V</p></div>
-        </div>
-      </div>
+      <PowerReadout results={electrical} mode={operatingMode} onModeChange={onOperatingModeChange} onExplore={onExplorePower} />
     </Panel>
   )
 }

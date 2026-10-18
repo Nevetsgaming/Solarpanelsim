@@ -22,7 +22,7 @@ export const learningTopics = [
   ...parts,
   {
     id: 'load', name: 'Load resistance',
-    description: 'The load represents an external device using the cell’s electrical output. Resistance describes how strongly it opposes current. This control stores your chosen resistance; electrical calculations will be added later.',
+    description: 'The load represents an external device using the cell’s electrical output. Resistance describes how strongly it opposes current. Adjust it to move the operating point along the cell’s current–voltage curve. Maximum-power mode uses an ideal controller; resistor mode delivers power to your selected load.',
   },
   {
     id: 'sun', name: 'Sunlight',

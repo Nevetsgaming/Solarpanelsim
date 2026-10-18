@@ -4,6 +4,7 @@
 // Columns: wavelength in nm, absorption coefficient in cm^-1.
 // These tabulated values include nonzero absorption below our teaching bandgap.
 export const siliconAbsorption: [number, number][] = [
+  [280, 2370000], [290, 2290000],
   [300, 1770000], [310, 1460000], [320, 1300000],
   [330, 1180000], [340, 1100000], [350, 1060000],
   [360, 1040000], [370, 737000], [380, 313000],

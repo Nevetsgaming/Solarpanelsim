@@ -77,6 +77,38 @@
 .power-box h3 { color: var(--muted); font-size: .7rem; font-weight: 500; }
 .power-value { margin-top: .25rem; font-family: var(--mono); font-size: 2rem; line-height: 1.3; font-weight: 500; letter-spacing: -.05em; }
 .power-value span { font-size: .85rem; color: var(--muted); }
+.power-button { display: block; padding: .2rem 0; border: none; background: none; color: var(--accent); cursor: pointer; user-select: text; }
+.power-button:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.power-button:active { color: #153e7b; }
+.power-help { margin-top: .8rem; color: var(--muted); font-size: .65rem; }
+.electrical-mode { display: flex; gap: .25rem; margin-bottom: 1rem; }
+.electrical-mode button { flex: 1; min-height: 2.4rem; padding: .3rem; border: 1px solid var(--border); border-radius: 5px; background: #fff; font-size: .62rem; cursor: pointer; }
+.electrical-mode button[aria-pressed='true'] { color: #1f58a7; background: #eaf2ff; border-color: #b6cdeb; }
+.formula-dialog { width: min(64rem, calc(100vw - 2rem)); max-height: calc(100svh - 2rem); padding: 0; border: 1px solid var(--border); border-radius: 14px; color: #202831; background: #fff; box-shadow: 0 24px 80px #17233240; }
+.formula-dialog::backdrop { background: #17233266; }
+.formula-dialog-content { padding: clamp(1rem, 3vw, 2rem); }
+.formula-dialog-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.formula-dialog-header h2 { font-size: 1.1rem; }
+.formula-close { flex-shrink: 0; width: 44px; height: 44px; border: none; border-radius: 8px; background: #f0f3f7; font-size: 1.6rem; cursor: pointer; }
+.formula-instruction { margin: 1rem 0; color: var(--muted); font-size: .76rem; }
+.formula-line { padding: 1rem .25rem; overflow-x: auto; font-size: clamp(.82rem, 1.5vw, 1rem); line-height: 2.5; white-space: nowrap; }
+.formula-term { display: inline; padding: .1rem .12rem; border: none; border-radius: 4px; color: #205ba8; background: #edf4ff; cursor: help; font: inherit; line-height: inherit; }
+.formula-term:hover, .formula-term:focus-visible { color: #fff; background: #2468c9; }
+.formula-term sub, .formula-term sup { font-size: .7em; }
+.formula-fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1.5; margin: 0 .3rem; }
+.formula-fraction > span:first-child { border-bottom: 1px solid #202831; padding-bottom: .15rem; }
+.formula-integral { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1; margin: 0 .3rem; }
+.formula-integral > button { font-size: 2.4em; line-height: 1.1; }
+.formula-integral > sup, .formula-integral > sub { font-size: .65em; line-height: 1.2; }
+.formula-navigation { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .5rem 0; }
+.formula-navigation button { min-height: 40px; border: none; border-radius: 6px; padding: .4rem .7rem; background: #f0f3f7; color: #52677e; font-size: .72rem; cursor: pointer; }
+.formula-navigation button[aria-current='page'] { background: #eaf2ff; color: #205ba8; }
+.term-explanation { min-height: 9rem; margin: 1rem 0; padding: 1.2rem; border: 1px solid var(--border); border-radius: 8px; background: #f8fafc; }
+.term-explanation h3 { margin-bottom: .5rem; font-size: .85rem; }
+.term-explanation p, .model-assumptions, .formula-dialog-content > p { font-size: .75rem; line-height: 1.8; }
+.model-assumptions summary { min-height: 40px; cursor: pointer; }
+.model-assumptions p { margin: .6rem 0; }
+.model-assumptions a, .optics-readout a { color: #205ba8; }
 .electrical-readings { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: .9rem; margin-top: .9rem; border-top: 1px solid var(--border); }
 .electrical-readings p { margin-top: .25rem; font-family: var(--mono); font-size: 1rem; }
 
@@ -112,8 +144,8 @@
 .silicon-emitter { min-height: 2.3rem; background: #b8daed; color: #294b62; }
 .silicon-base { background: #324f70; color: #fff; }
 .coating { background: #b4d5df; }
-.front-contacts { height: 32px; border: none; background: none; }
-.contact-cross-section { display: block; width: 100%; height: 32px; overflow: visible; }
+.front-contacts { height: 14px; border: none; background: none; }
+.contact-cross-section { display: block; width: 100%; height: 14px; overflow: visible; }
 .cell-layer[aria-pressed='true'], .silicon button[aria-pressed='true'], .silicon[data-selected='true'] { outline: 2px solid #2c7be5; outline-offset: -3px; }
 .cell-layer:active, .silicon button:active { filter: brightness(1.12); }
 .compact-layer-labels { display: none; }

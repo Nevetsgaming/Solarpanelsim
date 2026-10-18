@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "test": "node --test tests/optics.test.ts tests/panelGeometry.test.ts tests/spring.test.ts",
+    "test": "node --test tests/optics.test.ts tests/panelGeometry.test.ts tests/spring.test.ts tests/electrical.test.ts tests/interface.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

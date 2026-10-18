@@ -1,7 +1,8 @@
 import { siliconAbsorption } from '../data/silicon.ts'
 
-const planckConstant = 6.62607015e-34 // J s
-const speedOfLight = 299792458 // m/s
+export const planckConstant = 6.62607015e-34 // J s
+export const speedOfLight = 299792458 // m/s
+export const electronCharge = 1.602176634e-19 // C
 const joulesPerElectronVolt = 1.602176634e-19
 
 export const siliconBandgapEv = 1.12 // Teaching approximation near room temperature.
@@ -21,8 +22,8 @@ export function photonEnergyEv(wavelengthNm: number) {
 export const bandgapWavelengthNm = planckConstant * speedOfLight / (siliconBandgapEv * joulesPerElectronVolt) * 1e9
 
 export function absorptionCoefficient(wavelengthNm: number) {
-  if (!Number.isFinite(wavelengthNm) || wavelengthNm < 300 || wavelengthNm > 1200) {
-    throw new RangeError('Silicon data covers 300–1200 nm.')
+  if (!Number.isFinite(wavelengthNm) || wavelengthNm < 280 || wavelengthNm > 1200) {
+    throw new RangeError('Silicon data covers 280–1200 nm.')
   }
 
   // Interpolate log(alpha) between the two neighbouring table rows.

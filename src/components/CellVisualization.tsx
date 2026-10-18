@@ -78,7 +78,7 @@ export default function CellVisualization({ placedPartCount, onSelectPart, setti
                       </div>
                     ))}
                   </div>
-                  <p className="top-view-caption">Across fingers · {Number(sectionWidthMm.toFixed(1))} mm detail · heights exaggerated</p>
+                  <p className="top-view-caption">Magnified finger detail · {Number(sectionWidthMm.toFixed(1))} mm across · heights exaggerated</p>
                   <div className="compact-layer-labels" aria-label="Select an assembled layer">
                     {parts.slice(0, placedPartCount).reverse().map((part) => (
                       <button type="button" key={part.id} aria-pressed={selectedPartId === part.id} onClick={() => onSelectPart(part.id)}>{part.name}</button>

@@ -1,6 +1,6 @@
 export const defaultSettings = {
   wavelengthNm: 550,
-  loadResistance: 10,
+  loadResistance: 0.002,
   rearThickness: 20,
   siliconThickness: 180,
   coatingThickness: 80,
@@ -19,12 +19,13 @@ type PartOption = {
   min: number
   max: number
   step: number
+  logarithmic?: boolean
 }
 
-// Wavelength, silicon thickness and reflectance drive optics; other settings are visual or stored only.
+// Geometry drives shading and resistance. Coating/rear thickness remain visual only.
 export const partOptions: Record<string, PartOption[]> = {
   load: [
-    { key: 'loadResistance', label: 'Load resistance', unit: 'Ω', min: 0.1, max: 100, step: 0.1 },
+    { key: 'loadResistance', label: 'Load resistance', unit: 'Ω', min: 0.0001, max: 100, step: 0.0001, logarithmic: true },
   ],
   sun: [],
   'rear-contact': [

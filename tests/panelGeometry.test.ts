@@ -27,11 +27,11 @@ test('10 cm fingers fit with automatically increased spacing', () => {
 test('cross-section uses actual finger widths and centre-to-centre spacing', () => {
   const narrow = contactSection(60, 1.5)
   const wide = contactSection(120, 1.5)
-  assert.equal(narrow.sectionWidthMm, 20)
+  assert.equal(narrow.sectionWidthMm, 4.5)
   assert.equal(wide.fingers[0].width, narrow.fingers[0].width * 2)
   assert.ok(Math.abs(narrow.fingers[1].centre - narrow.fingers[0].centre - 1.5) < 1e-10)
-  assert.equal(contactSection(60, 3).fingers.length, 7)
-  assert.equal(narrow.fingers.length, 13)
+  assert.equal(contactSection(60, 3).fingers.length, 3)
+  assert.equal(narrow.fingers.length, 3)
 })
 
 test('cross-section expands its crop to show centimetre-wide fingers', () => {

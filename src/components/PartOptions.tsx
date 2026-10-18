@@ -26,12 +26,12 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
           <input
             id={option.key}
             type="range"
-            min={option.key === 'fingerSpacing' ? minimumFingerSpacing(settings.fingerWidth) : option.min}
-            max={option.max}
-            step={option.step}
-            value={settings[option.key]}
+            min={option.logarithmic ? Math.log10(option.min) : option.key === 'fingerSpacing' ? minimumFingerSpacing(settings.fingerWidth) : option.min}
+            max={option.logarithmic ? Math.log10(option.max) : option.max}
+            step={option.logarithmic ? 0.01 : option.step}
+            value={option.logarithmic ? Math.log10(settings[option.key]) : settings[option.key]}
             aria-valuetext={`${settings[option.key]} ${option.unit}`}
-            onChange={(event) => onSettingChange(option.key, Number(event.target.value))}
+            onChange={(event) => onSettingChange(option.key, option.logarithmic ? Number((10 ** Number(event.target.value)).toPrecision(4)) : Number(event.target.value))}
           />
         </div>
       )) : <p>Select a part to see its options.</p>}
@@ -42,7 +42,7 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
       {options && <p>{partId === 'sun'
         ? isSunlight ? 'Sunlight contains many wavelengths. Switch to Constant wavelength to use the slider beside the sun.' : 'Adjust wavelength beside the sun. Optical power stays fixed.'
         : partId === 'load'
-          ? 'Resistance setting only. Current, voltage and power are not calculated yet.'
+          ? 'Adjusting resistance switches to resistor-load operation. The logarithmic slider spans 0.0001–100 Ω; maximum-power mode uses an ideal controller instead.'
         : partId === 'silicon'
           ? 'Thickness changes single-pass absorption. Drawing not to scale.'
         : partId === 'coating'

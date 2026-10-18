@@ -56,7 +56,7 @@ test('absorption remains bounded throughout slider ranges', () => {
 })
 
 test('invalid inputs are rejected instead of extrapolated silently', () => {
-  for (const wavelength of [0, 299, 1201, NaN, Infinity]) {
+  for (const wavelength of [0, 279, 1201, NaN, Infinity]) {
     assert.throws(() => calculateOptics(wavelength, 180), RangeError)
   }
   for (const thickness of [-1, NaN, Infinity]) {

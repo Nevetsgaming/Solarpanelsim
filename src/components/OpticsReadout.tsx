@@ -30,8 +30,8 @@ export default function OpticsReadout({ wavelengthNm, thicknessUm, hasSilicon, r
           <dl>
             <div><dt>Single-pass absorption</dt><dd>{percentage(optics.absorbedFraction)}%</dd></div>
             <div><dt>Light reflected</dt><dd>{reflectedPercent}%</dd></div>
-            <div><dt>Absorbed, of incoming light</dt><dd>{percentage(optics.absorbedIncidentFraction)}%</dd></div>
-            <div><dt>Generation-capable, of incoming light</dt><dd>{percentage(optics.usableAbsorbedFraction)}%</dd></div>
+            <div><dt>Absorbed, before metal shading</dt><dd>{percentage(optics.absorbedIncidentFraction)}%</dd></div>
+            <div><dt>Generation-capable, before shading</dt><dd>{percentage(optics.usableAbsorbedFraction)}%</dd></div>
           </dl>
           <meter min="0" max="1" value={optics.absorbedFraction} aria-label="Fraction absorbed in silicon" />
         </>
