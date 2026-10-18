@@ -30,6 +30,10 @@
 .control-help summary::-webkit-details-marker { display: none; }
 .control-help[open] { padding-bottom: .6rem; }
 .control-help p { margin: .6rem 0; line-height: 1.7; color: var(--muted); }
+.quarter-wave-help { margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--border); }
+.quarter-wave-help h4 { font-size: .74rem; }
+.quarter-wave-help a { color: #205ba8; }
+.quarter-wave-help .quarter-wave-formula { font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 1.15rem; color: #25364b; }
 .control-help input[type='number'] { padding: .5rem; border: 1px solid var(--border); border-radius: 4px; background: #fff; font: inherit; }
 .experiment-panel > summary, .learn-section > summary { font-size: .8rem; font-weight: 550; cursor: pointer; padding: .5rem 0; }
 .experiment-panel > details { margin-top: .7rem; }
@@ -265,6 +269,13 @@ button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 .sun-readings > div { margin-top: .8rem; }
 .sun-readings dt { color: var(--muted); }
 .sun-readings dd { margin: .2rem 0 0; font-variant-numeric: tabular-nums; }
+.wavelength-guide { margin-top: 1rem; font-size: .73rem; line-height: 1.7; }
+.wavelength-guide summary { cursor: pointer; padding: .4rem 0; }
+.wavelength-guide dl > div { margin-top: .7rem; padding: .7rem; border-left: 2px solid var(--border); }
+.wavelength-guide dl > div[data-current='true'] { border-color: #2468c9; background: #edf4ff; }
+.wavelength-guide dt { font-weight: 600; }
+.wavelength-guide dd { margin: .35rem 0 0; color: #5d6977; }
+.wavelength-guide a, .range-selected { color: #205ba8; }
 .optics-readout { margin: 0 1.3rem; padding: 1.2rem 0; border-top: 1px solid var(--border); font-size: .75rem; }
 .optics-readout h3 { font-size: .8rem; font-weight: 650; margin-bottom: 1.2rem; }
 .optics-readout dl { margin: 0 0 1rem; }

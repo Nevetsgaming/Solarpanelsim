@@ -10,7 +10,6 @@ import FormulaExplorer from './components/FormulaExplorer'
 import type { ReadingTopic } from './components/PowerReadout'
 import type { DesignSnapshot } from './experiments'
 import ExperimentPanel from './components/ExperimentPanel'
-import IVCurve from './components/IVCurve'
 import './App.css'
 
 // App arranges the page. Each panel owns its own content.
@@ -98,7 +97,7 @@ function App() {
           <CellVisualization placedPartCount={placedPartCount} onSelectPart={setSelectedPartId} settings={settings} selectedPartId={selectedPartId} onWavelengthChange={(value) => changeSetting('wavelengthNm', value)} isSunlight={isSunlight} onLightModeChange={changeLightMode} electrical={electrical} onExplore={(topic) => { setWorkspaceMode('learn'); setFormulaTopic(topic) }} challengeActive={challengeActive} learnMode={workspaceMode === 'learn'} />
           {workspaceMode === 'learn' && <LearningPanel selectedPartId={selectedPartId} settings={settings} hasSilicon={placedPartCount >= 2} hasCoating={placedPartCount >= 3} isSunlight={isSunlight} electrical={electrical}
             experiment={<ExperimentPanel current={current} previous={previous} saved={saved} challengeBaseline={challengeBaseline} onSave={() => { if (electrical.assembled && !challengeActive) setSaved(current) }} onRestore={restoreSaved} onChallenge={startChallenge} onEndChallenge={() => setChallengeBaseline(null)} />}
-            curve={<IVCurve results={electrical} mode="mpp" />} />}
+            />}
         </div>
       </main>
       {formulaTopic && <FormulaExplorer topic={formulaTopic} mode="mpp" results={electrical} operating={electrical.mpp} settings={settings} isSunlight={isSunlight} onClose={() => setFormulaTopic(null)} />}

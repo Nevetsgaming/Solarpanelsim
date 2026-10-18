@@ -1,9 +1,9 @@
 import Panel from './Panel'
 import { learningTopics } from '../parts'
 import OpticsReadout from './OpticsReadout'
+import WavelengthGuide from './WavelengthGuide'
 import type { PartSettings } from '../partOptions'
 import { calculateOptics } from '../physics/optics'
-import { solarPhotonFlux } from '../physics/spectrum'
 import type { ElectricalResults } from '../physics/electrical'
 import type { ReactNode } from 'react'
 
@@ -15,10 +15,9 @@ type LearningPanelProps = {
   isSunlight: boolean
   electrical: ElectricalResults
   experiment?: ReactNode
-  curve?: ReactNode
 }
 
-export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight, electrical, experiment, curve }: LearningPanelProps) {
+export default function LearningPanel({ selectedPartId, settings, hasSilicon, hasCoating, isSunlight, electrical, experiment }: LearningPanelProps) {
   const selectedPart = learningTopics.find((part) => part.id === selectedPartId)
   const sunReadings = selectedPartId === 'sun' && !isSunlight
     ? calculateOptics(settings.wavelengthNm, settings.siliconThickness) : null
@@ -39,11 +38,10 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
           {sunReadings && (
             <dl className="sun-readings">
               <div><dt>Photon energy</dt><dd>{sunReadings.energyEv.toFixed(3)} eV</dd></div>
-              <div><dt>Incoming photon rate</dt><dd>{sunReadings.photonFlux.toExponential(2)} /s/m²</dd></div>
             </dl>
           )}
-          {sunReadings && (settings.wavelengthNm < 380 || settings.wavelengthNm > 780) && <p>Our eyes cannot see ultraviolet or infrared light. We give them a colour on screen just so you can tell when you are using them.</p>}
-          {selectedPartId === 'sun' && isSunlight && <dl className="sun-readings"><div><dt>Photon energy</dt><dd>Multiple wavelengths</dd></div><div><dt>Incoming photon rate</dt><dd>{solarPhotonFlux.toExponential(2)} /s/m²</dd></div></dl>}
+          {selectedPartId === 'sun' && isSunlight && <dl className="sun-readings"><div><dt>Photon energy</dt><dd>Multiple wavelengths</dd></div></dl>}
+          {selectedPartId === 'sun' && <WavelengthGuide wavelengthNm={settings.wavelengthNm} isSunlight={isSunlight} />}
         </div>
       )}
       {!selectedPart && <div className="inspector-empty"><h3>Explore a part</h3><p>Click a layer or the sun. We’ll look at what it does and how it helps the cell work.</p></div>}
@@ -51,7 +49,6 @@ export default function LearningPanel({ selectedPartId, settings, hasSilicon, ha
         <OpticsReadout wavelengthNm={settings.wavelengthNm} thicknessUm={settings.siliconThickness} hasSilicon={hasSilicon} reflectedPercent={hasCoating ? settings.reflectedPercent : 0} isSunlight={isSunlight} unshadedFraction={electrical.assembled ? electrical.unshadedFraction : 1} />
       </details>
       {experiment}
-      {curve}
     </Panel>
   )
 }

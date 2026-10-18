@@ -29,6 +29,10 @@ test('finger-width feedback shows current contact shading and resistance only fo
     assert.ok(!render(defaultSettings, 'silicon').markup.includes('Light blocked by contacts'))
     assert.equal(render(defaultSettings, 'sun').markup, '', 'the sun has no duplicate options text section')
     assert.ok(render(defaultSettings, 'coating').markup.includes('Appearance only'))
+    const coatingHelp = render(defaultSettings, 'coating').markup
+    assert.ok(coatingHelp.includes('Quarter-wave effect') && coatingHelp.includes('λ<sub>0</sub>'))
+    assert.ok(coatingHelp.includes('4n<sub>coat</sub>') && coatingHelp.includes('t = 75 nm'))
+    assert.ok(coatingHelp.includes('thickness changes the drawing, not reflection or power'))
     const lockedCoating = renderToStaticMarkup(createElement(PartOptions, { selectedPartId: 'coating', settings: defaultSettings, electrical: narrow.electrical, isSunlight: true, challengeActive: true, onSettingChange: () => {} }))
     assert.equal((lockedCoating.match(/disabled=""/g) ?? []).length, 2)
     const lockedWidth = renderToStaticMarkup(createElement(PartOptions, { selectedPartId: 'front-contacts', settings: defaultSettings, electrical: narrow.electrical, isSunlight: true, challengeActive: true, onSettingChange: () => {} }))
@@ -59,6 +63,16 @@ test('maximum-power UI renders matching current/voltage without load controls, w
     const results = calculateElectrical(defaultSettings, true, true)
     const noop = () => {}
     const { default: LearningPanel } = await server.ssrLoadModule('/src/components/LearningPanel.tsx')
+    const { default: WavelengthGuide } = await server.ssrLoadModule('/src/components/WavelengthGuide.tsx')
+    for (const wavelengthNm of [350, 800, 1065, 1200]) {
+      const guide = renderToStaticMarkup(createElement(WavelengthGuide, { wavelengthNm, isSunlight: false }))
+      assert.equal((guide.match(/data-current="true"/g) ?? []).length, 1)
+      assert.ok(guide.includes('Wavelength guide') && guide.includes('more photons per watt'))
+      assert.ok(guide.includes('More photons or thicker silicon cannot fix'))
+    }
+    const sunlightGuide = renderToStaticMarkup(createElement(WavelengthGuide, { wavelengthNm: 550, isSunlight: true }))
+    assert.ok(!sunlightGuide.includes('data-current="true"'))
+    assert.ok(sunlightGuide.includes('actual amount in each range comes from the solar spectrum'))
     for (const selectedPartId of ['silicon', 'emitter', 'base', 'sun', 'front-contacts', null]) {
       const inspector = renderToStaticMarkup(createElement(LearningPanel, { selectedPartId, settings: defaultSettings, electrical: results, hasSilicon: true, hasCoating: true, isSunlight: true }))
       const shouldShow = ['silicon', 'emitter', 'base'].includes(selectedPartId)

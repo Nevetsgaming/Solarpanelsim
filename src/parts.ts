@@ -15,7 +15,7 @@ export const parts: LearningTopic[] = [
   {
     id: 'coating', name: 'Anti-reflection coating',
     description: 'Less light bouncing away means more light can enter the silicon.',
-    detail: 'Real reflection depends on wavelength, material, thickness and angle. Here you set the reflected percentage directly. The thickness slider changes only the picture.',
+    detail: 'A common quarter-wave coating reduces reflection by making reflected waves oppose each other. Its thickness targets a particular wavelength. Here you set reflection directly; thickness changes only the picture. Open the thickness slider’s ? for the quarter-wave formula.',
   },
   {
     id: 'front-contacts', name: 'Front contacts',

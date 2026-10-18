@@ -71,6 +71,13 @@ export default function PartOptions({ selectedPartId, settings, onSettingChange,
           <details className="control-help">
             <summary aria-label={`Help with ${option.label.toLowerCase()}`}>?</summary>
             <p>{helpText[option.key]}</p>
+            {option.key === 'coatingThickness' && <div className="quarter-wave-help">
+              <h4>Quarter-wave effect</h4>
+              <p>A common design is one-quarter wavelength thick inside the coating. With the right material and light arriving straight on, reflections from its two surfaces oppose each other, reducing reflection near a chosen wavelength.</p>
+              <p className="quarter-wave-formula">t = <span className="formula-fraction"><span>λ<sub>0</sub></span><span>4n<sub>coat</sub></span></span></p>
+              <p>λ<sub>0</sub> is the target wavelength in air; n<sub>coat</sub> is the coating’s refractive index. For 600 nm light and n<sub>coat</sub> = 2, t = 75 nm.</p>
+              <a href="https://www.rp-photonics.com/anti_reflection_coatings.html" target="_blank" rel="noopener noreferrer">Quarter-wave coating reference</a>
+            </div>}
             {option.key === 'fingerWidth' && <>
               <label htmlFor="finger-width-exact">Exact width (µm)</label>
               <input key={settings.fingerWidth} id="finger-width-exact" type="number" min={option.min} max={option.max} step="1" defaultValue={settings.fingerWidth}
